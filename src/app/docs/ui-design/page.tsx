@@ -17,7 +17,7 @@ export default function UiDesignPage() {
           className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-white/25 hover:bg-white/[0.06] transition-all duration-300 group"
         >
           <h2 className="text-lg font-semibold text-white mb-2 group-hover:text-white/90">
-            Math Loaders
+            cluster-loaders
           </h2>
           <p className="text-sm text-white/40 leading-relaxed">
             Minimalist loading animations built from mathematical curves with React &amp; SVG.

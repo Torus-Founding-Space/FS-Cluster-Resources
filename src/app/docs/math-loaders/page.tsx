@@ -19,7 +19,7 @@ const toc: TOCItemType[] = [
 export default function MathLoadersPage() {
   return (
     <DocsPage toc={toc}>
-      <DocsTitle>Math Loaders</DocsTitle>
+      <DocsTitle>cluster-loaders</DocsTitle>
       <DocsDescription>
         Parametric, continuous mathematical loading animations rendered in pure SVG & HTML5 Canvas. Zero dependencies.
       </DocsDescription>

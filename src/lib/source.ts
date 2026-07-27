@@ -17,7 +17,7 @@ export const pageTree: PageTree.Root = {
       children: [
         {
           type: 'page',
-          name: 'Math Loaders',
+          name: 'cluster-loaders',
           url: '/docs/math-loaders',
         },
       ],
@@ -117,6 +117,20 @@ export const pageTree: PageTree.Root = {
         type: 'page',
         name: 'Overview',
         url: '/docs/learning',
+      },
+      children: [],
+    },
+
+    // ── License ───────────────────────────────────────────────────
+    {
+      type: 'folder',
+      name: 'License',
+      root: true,
+      defaultOpen: true,
+      index: {
+        type: 'page',
+        name: 'MIT License',
+        url: 'https://github.com/Torus-Founding-Space/FS-Cluster-Resources/blob/main/LICENSE',
       },
       children: [],
     },
