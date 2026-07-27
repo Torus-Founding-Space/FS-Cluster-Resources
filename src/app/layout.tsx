@@ -34,8 +34,13 @@ const helvetica = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Fs-Cluster Founder Resources",
+  title: "Founder resources by Cluster",
   description: "A premium collection of developer and founder resources",
+  icons: {
+    icon: "/donut.png",
+    shortcut: "/donut.png",
+    apple: "/donut.png",
+  },
 };
 
 export default function RootLayout({
@@ -53,11 +58,13 @@ export default function RootLayout({
               title: (
                 <div className="flex items-center gap-2.5">
                   <Image
-                    src="/donut.png"
-                    alt="Torus FS Donut Icon"
-                    width={32}
-                    height={32}
-                    className="w-8 h-8 rounded-lg object-contain"
+                    src="/logos/LOGOGIF.gif"
+                    alt="FS Cluster Logo"
+                    width={48}
+                    height={48}
+                    style={{ width: 'auto', height: '48px' }}
+                    className="rounded-full mix-blend-screen opacity-95"
+                    unoptimized
                   />
                   <span className="font-bold text-sm tracking-tight text-white">FS Cluster</span>
                 </div>
