@@ -34,12 +34,39 @@ const helvetica = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Founder resources by Cluster",
-  description: "A premium collection of developer and founder resources",
+  metadataBase: new URL("https://clusterdocs.torusfoundingspace.com"),
+  title: {
+    default: "Founder resources by Cluster",
+    template: "%s | Founder resources by Cluster",
+  },
+  description: "Free open-source developer tools, architecture guides, and startup stack resources for founders by FS Cluster & Torus Founding Space.",
+  keywords: ["founder resources", "developer tools", "startup stack", "open source", "react loaders", "fs cluster", "torus founding space"],
   icons: {
     icon: "/logos/logo.png",
     shortcut: "/logos/logo.png",
     apple: "/logos/logo.png",
+  },
+  openGraph: {
+    title: "Founder resources by Cluster",
+    description: "Free open-source developer tools, architecture guides, and startup stack resources for founders.",
+    url: "https://clusterdocs.torusfoundingspace.com",
+    siteName: "Founder resources by Cluster",
+    images: [
+      {
+        url: "/logos/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Founder resources by Cluster",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Founder resources by Cluster",
+    description: "Free open-source developer tools, architecture guides, and startup stack resources for founders.",
+    images: ["/logos/logo.png"],
   },
 };
 
