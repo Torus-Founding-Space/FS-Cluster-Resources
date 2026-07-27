@@ -1,0 +1,46 @@
+{
+  "name": "cluster-loaders",
+  "version": "1.0.0",
+  "description": "Physics-driven & parametric SVG loaders for React. Powered by FS Cluster.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "cluster-loaders": "./cli.mjs"
+  },
+  "files": [
+    "dist",
+    "cli.mjs",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "react",
+    "loaders",
+    "svg",
+    "physics",
+    "parametric",
+    "fs-cluster",
+    "trous-fs",
+    "cluster-loaders",
+    "ui"
+  ],
+  "author": "FS Cluster <https://github.com/kishore110804/Cluster-resources->",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kishore110804/Cluster-resources-.git"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}
