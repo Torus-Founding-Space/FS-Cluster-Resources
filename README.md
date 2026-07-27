@@ -1,68 +1,47 @@
 <div align="center">
 
-  <img src="public/logos/LOGOGIF.gif" alt="FS Cluster Logo" width="160" style="border-radius: 12px;" />
+  <img src="public/logos/LOGOGIF.gif" alt="FS Cluster Logo" width="550" style="max-width: 100%; height: auto; border-radius: 16px;" />
 
-  # ⚡ FS Cluster Docs & `cluster-loaders`
+  # FS Cluster Docs & `cluster-loaders`
 
-  > **High-Performance Physics, Dither Shaders & Parametric Loaders for React**  
-  > *Curated Free Open-Source Developer, Branding & Startup Resources by FS Cluster & Torus Founding Space*
+  **Physics-Driven, Dither Shaders & Parametric Loaders for React**
 
-  [![npm version](https://img.shields.io/npm/v/cluster-loaders.svg?color=89B4FA&style=for-the-badge)](https://www.npmjs.com/package/cluster-loaders)
-  [![license](https://img.shields.io/github/license/fs-cluster/cluster-loaders.svg?color=A6E3A1&style=for-the-badge)](LICENSE)
-  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-F9E2AF.svg?style=for-the-badge)](https://github.com/Torus-Founding-Space/FS-Cluster-Resources/pulls)
-  [![Torus FS](https://img.shields.io/badge/Torus--FS-Free%20Membership-CBA6F7.svg?style=for-the-badge)](https://torusfoundingspace.com)
+  [Documentation Site](https://fs-cluster-docs.vercel.app) | [NPM Package](https://www.npmjs.com/package/cluster-loaders) | [Torus Founding Space](https://torusfoundingspace.com)
+
+  [![NPM Version](https://img.shields.io/npm/v/cluster-loaders.svg?style=flat-square)](https://www.npmjs.com/package/cluster-loaders)
+  [![License](https://img.shields.io/github/license/Torus-Founding-Space/FS-Cluster-Resources.svg?style=flat-square)](LICENSE)
+  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg?style=flat-square)](https://github.com/Torus-Founding-Space/FS-Cluster-Resources/pulls)
 
 </div>
 
 ---
 
-### 👾 Dither & Shader Aesthetics Engine
+## Overview
 
-```
-  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-  ░░ ░░░░░░░░░░  FS CLUSTER DITHER ENGINE v2.0  ░░░░░░░░░░░░░░░░░░░░░ ░░
-  ▒▒  [✦] Stochastic Static  [✦] Bayer 8x8 Dither  [✦] Noise Shaders   ▒▒
-  ▓▓  [✦] Parametric Curves  [✦] Spring Physics    [✦] 3D Spatial Visuals▓▓
-  ███████████████████████████████████████████████████████████████████████
-```
+FS Cluster Docs is an open-source documentation hub and component ecosystem containing `cluster-loaders`—a zero-dependency library of physics-driven, mathematical, parametric, and dither-shader SVG and HTML5 Canvas loaders for React.
 
----
+- **Documentation**: [Official Documentation Hub](https://fs-cluster-docs.vercel.app) (or run locally with `npm run dev`)
+- **NPM Package**: [`cluster-loaders`](https://www.npmjs.com/package/cluster-loaders)
 
-## 🧰 Free Resources Directory
+### Preview & Media
 
-### 💻 1. Free Developer Resources
-* **`cluster-loaders` Library**: Lightweight, zero-dependency parametric, physics, and dither-shader React components rendered with SVG and HTML5 Canvas.
-* **CLI Component Installer**: Add components straight into your project source with `npx cluster-loaders add <loader>`.
-* **Dither Shaders & Algorithms**: Bayer Matrix 8x8, Stochastic Static Noise, Chladni wave interference, and Voronoi cell dynamics.
-* **Next.js & Fumadocs Boilerplate**: Pre-configured, high-performance documentation site template.
-
-### 🎨 2. Free Branding Resources
-* **Logo & Visual Assets**: High-resolution animated logo GIFs and PNGs in [`public/logos/`](public/logos/).
-* **Color Palette System**: Pre-defined HSL dark-mode theme tokens (`#CBA6F7`, `#89B4FA`, `#A6E3A1`, `#F9E2AF`).
-* **Design Tokens & Icons**: Standardized CSS design tokens for modern Web3, AI, and developer tools.
-
-### 🚀 3. Free Startup Resources
-* **[Open Source Playbook](packages/cluster-loaders/OPEN_SOURCE_PLAYBOOK.md)**: Step-by-step guide for creating free GitHub Orgs, publishing NPM packages, and building developer trust.
-* **Zero-Cost Infrastructure**: Complete setup for $0/mo hosting on Vercel, Cloudflare Pages, and GitHub Actions.
-* **Growth & Distribution Funnel**: Actionable frameworks to turn open-source utility tools into startup user pipelines.
+![FS Cluster Loaders Preview](public/logos/LOGOGIF.gif)
 
 ---
 
-## ⚡ Quick Start (`cluster-loaders`)
+## Quick Start
 
-### 1. Install via Package Manager
+### Installation via NPM
 ```bash
 npm install cluster-loaders
-# or
-pnpm add cluster-loaders
 ```
 
-### 2. Add via CLI (shadcn-style)
+### Installation via CLI (shadcn-style)
 ```bash
 npx cluster-loaders add astroid
 ```
 
-### 3. Usage Example
+### Basic Usage
 ```tsx
 import React from 'react';
 import { CurveLoader, curves } from 'cluster-loaders';
@@ -71,7 +50,7 @@ export default function LoadingState() {
   const astroid = curves.find(c => c.name === "Astroid");
 
   return (
-    <div className="w-24 h-24 text-[#CBA6F7]">
+    <div className="w-24 h-24 text-purple-400">
       <CurveLoader config={astroid} />
     </div>
   );
@@ -80,55 +59,45 @@ export default function LoadingState() {
 
 ---
 
-## 🛠️ Step-by-Step Contribution Guide
+## Contributing
 
-We welcome contributions from developers of all skill levels! Here is how to get started:
+This project is maintained as open source. Contributions, bug reports, and pull requests are welcomed.
 
-1. **Fork the Repository**  
-   Click **Fork** at the top right of this repository.
+### Development Setup
 
-2. **Clone Your Fork**  
+1. Fork and clone the repository:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/FS-Cluster-Resources.git
+   git clone https://github.com/Torus-Founding-Space/FS-Cluster-Resources.git
    cd FS-Cluster-Resources
    ```
-
-3. **Install Dependencies**  
+2. Install dependencies:
    ```bash
    npm install
    ```
-
-4. **Start Development Server**  
+3. Start the local server:
    ```bash
    npm run dev
    ```
-   Open `http://localhost:3000` to view live updates.
-
-5. **Create & Test Changes**  
-   * Add UI components or canvas loaders in `src/components/`.
-   * Add package components in `packages/cluster-loaders/src/`.
-
-6. **Submit a Pull Request (PR)**  
-   Push changes to your fork and submit a PR with a concise description of your work.
+4. Create your feature branch, add components under `src/components/` or `packages/cluster-loaders/src/`, and submit a Pull Request.
 
 ---
 
-## 🎯 Join Torus Founding Space (100% Free)
+## Socials & Links
 
-> **Is starting your own company or working at a high-growth startup your ultimate goal?**
-
-**[Torus Founding Space](https://torusfoundingspace.com)** provides a zero-cost launchpad and ecosystem for builders, developers, and future founders.
-
-* 🤝 **Co-Founder Matching**: Connect with technical & business co-founders.
-* 🛠️ **Free Infrastructure & Resources**: Access free tech stacks, startup playbooks, and mentorship.
-* 🚀 **Venture Scaling**: Get guidance on turning open-source projects into venture-backed companies.
-
-👉 **[Apply Now at torusfoundingspace.com](https://torusfoundingspace.com)** — *Membership is 100% Free!*
+- **Website**: [torusfoundingspace.com](https://torusfoundingspace.com)
+- **GitHub**: [Torus-Founding-Space / FS-Cluster-Resources](https://github.com/Torus-Founding-Space/FS-Cluster-Resources)
+- **NPM**: [cluster-loaders](https://www.npmjs.com/package/cluster-loaders)
+- **Twitter / X**: [@TorusFS](https://x.com)
+- **Discord**: [Join Community](https://discord.gg)
 
 ---
 
-<div align="center">
+## Torus Founding Space
 
-  **Made with ❤️ by [FS Cluster](https://github.com/Torus-Founding-Space/FS-Cluster-Resources) & [Torus Founding Space](https://torusfoundingspace.com)**
+If starting your own company or joining a startup as a founding member is your ultimate goal, you can apply for membership at [torusfoundingspace.com](https://torusfoundingspace.com). Membership is 100% free.
 
-</div>
+---
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for more details.
