@@ -1,7 +1,7 @@
 {
   "name": "cluster-loaders",
-  "version": "1.0.0",
-  "description": "Physics-driven & parametric SVG loaders for React. Powered by FS Cluster.",
+  "version": "1.0.1",
+  "description": "Physics-driven, parametric & dither-shader SVG/Canvas loaders for React. Powered by FS Cluster & Torus Founding Space.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -21,18 +21,20 @@
     "react",
     "loaders",
     "svg",
+    "canvas",
+    "dither",
     "physics",
     "parametric",
     "fs-cluster",
-    "trous-fs",
+    "torus-fs",
     "cluster-loaders",
     "ui"
   ],
-  "author": "FS Cluster <https://github.com/kishore110804/Cluster-resources->",
+  "author": "FS Cluster & Torus Founding Space <https://github.com/Torus-Founding-Space/FS-Cluster-Resources>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kishore110804/Cluster-resources-.git"
+    "url": "https://github.com/Torus-Founding-Space/FS-Cluster-Resources.git"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

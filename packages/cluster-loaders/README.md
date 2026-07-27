@@ -4,9 +4,9 @@
 
   # Cluster Loaders (`cluster-loaders`)
 
-  **Physics-Driven, Dither Shaders & Parametric Loaders for React**
+  **Free Open-Source Developer Tools & Founder Resources**
 
-  [Documentation](https://fs-cluster-docs.vercel.app) | [NPM Package](https://www.npmjs.com/package/cluster-loaders) | [Torus Founding Space](https://torusfoundingspace.com)
+  [Documentation](https://fs-cluster-docs.vercel.app) | [NPM Package](https://www.npmjs.com/package/cluster-loaders) | [NPM Profile](https://www.npmjs.com/~kishore_n) | [Torus Founding Space](https://torusfoundingspace.com)
 
   [![NPM Version](https://img.shields.io/npm/v/cluster-loaders.svg?style=flat-square)](https://www.npmjs.com/package/cluster-loaders)
   [![License](https://img.shields.io/github/license/Torus-Founding-Space/FS-Cluster-Resources.svg?style=flat-square)](../../LICENSE)
@@ -17,51 +17,31 @@
 
 ## Overview
 
-A lightweight, zero-dependency collection of continuous parametric loaders — mathematical curves, fluid dynamics, standing waves, stochastic noise, Bayer matrix dithering, and 3D projections — rendered in high-performance SVG and HTML5 Canvas.
+`cluster-loaders` is a lightweight, zero-dependency open-source React component package provided by FS Cluster & Torus Founding Space to support founders and developers building web applications.
 
 ---
 
 ## Installation
 
-### NPM
+### Package Manager
 ```bash
 npm install cluster-loaders
 ```
 
-### CLI Component Installer (shadcn style)
+### CLI Installer (shadcn style)
 ```bash
 npx cluster-loaders add astroid
 ```
 
 ---
 
-## Usage
-
-```tsx
-import React from 'react';
-import { CurveLoader, curves } from 'cluster-loaders';
-
-export default function LoadingState() {
-  const astroid = curves.find(c => c.name === "Astroid");
-
-  return (
-    <div className="w-24 h-24 text-purple-400">
-      <CurveLoader config={astroid} />
-    </div>
-  );
-}
-```
-
----
-
 ## Contributing
 
-This package is open source. Pull requests and feature contributions are welcome.
+This package is open source. Pull requests and resource contributions are welcome.
 
 1. Fork and clone the repository.
 2. Run `npm install`.
-3. Add custom curves or canvas loaders under `src/`.
-4. Open a Pull Request.
+3. Submit a Pull Request.
 
 ---
 
