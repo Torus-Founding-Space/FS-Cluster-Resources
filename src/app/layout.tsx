@@ -37,9 +37,9 @@ export const metadata: Metadata = {
   title: "Founder resources by Cluster",
   description: "A premium collection of developer and founder resources",
   icons: {
-    icon: "/donut.png",
-    shortcut: "/donut.png",
-    apple: "/donut.png",
+    icon: "/logos/logo.png",
+    shortcut: "/logos/logo.png",
+    apple: "/logos/logo.png",
   },
 };
 
@@ -66,7 +66,7 @@ export default function RootLayout({
                     className="rounded-full mix-blend-screen opacity-95"
                     unoptimized
                   />
-                  <span className="font-bold text-sm tracking-tight text-white">FS Cluster</span>
+                 
                 </div>
               ),
               transparentMode: "top",
