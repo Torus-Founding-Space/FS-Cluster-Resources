@@ -2,11 +2,11 @@
 
   <img src="public/logos/LOGOGIF.gif" alt="FS Cluster Logo" width="550" style="max-width: 100%; height: auto; border-radius: 16px;" />
 
-  # FS Cluster Docs & `cluster-loaders`
+  # FS Cluster & Torus Founding Space
 
-  **Physics-Driven, Dither Shaders & Parametric Loaders for React**
+  **Free Open-Source Resources, Dev Tools & Ecosystem for Founders**
 
-  [Documentation Site](https://fs-cluster-docs.vercel.app) | [NPM Package](https://www.npmjs.com/package/cluster-loaders) | [Torus Founding Space](https://torusfoundingspace.com)
+  [Documentation Hub](https://fs-cluster-docs.vercel.app) | [NPM Package](https://www.npmjs.com/package/cluster-loaders) | [Apply to Torus FS](https://torusfoundingspace.com)
 
   [![NPM Version](https://img.shields.io/npm/v/cluster-loaders.svg?style=flat-square)](https://www.npmjs.com/package/cluster-loaders)
   [![License](https://img.shields.io/github/license/Torus-Founding-Space/FS-Cluster-Resources.svg?style=flat-square)](LICENSE)
@@ -18,14 +18,28 @@
 
 ## Overview
 
-FS Cluster Docs is an open-source documentation hub and component ecosystem containing `cluster-loaders`—a zero-dependency library of physics-driven, mathematical, parametric, and dither-shader SVG and HTML5 Canvas loaders for React.
+FS Cluster Founder Resources, is an open-source hub of free developer tools, infrastructure blueprints, branding kits, and growth resources designed to help founders and engineering teams build and launch startups efficiently.
 
-- **Documentation**: [Official Documentation Hub](https://fs-cluster-docs.vercel.app) (or run locally with `npm run dev`)
+- **Documentation Hub**: [Access Free Resources](https://fs-cluster-docs.vercel.app)
 - **NPM Package**: [`cluster-loaders`](https://www.npmjs.com/package/cluster-loaders)
+- **Community Membership**: [Torus Founding Space](https://torusfoundingspace.com) (100% Free)
 
-### Preview & Media
+---
 
-![FS Cluster Loaders Preview](public/logos/LOGOGIF.gif)
+## Free Founder Resources
+
+### 1. Developer & Infrastructure Resources
+- **Free Hosting Blueprints**: Guides for zero-cost deployment on Vercel, Cloudflare Pages, and GitHub Pages.
+- **Component Libraries & Packages**: Zero-dependency open-source utilities downloadable via NPM or CLI.
+- **AI & Dev Tools Catalog**: Curated selection of free APIs, AI developer tools, and boilerplates.
+
+### 2. Branding & Asset Resources
+- **Brand Kits & Logos**: Free high-resolution visual assets and logos available in [`public/logos/`](public/logos/).
+- **Design Tokens**: Standardized color systems and theme guidelines for startup web applications.
+
+### 3. Startup & Growth Resources
+- **Open Source Playbook**: [Open Source Playbook Guide](packages/cluster-loaders/OPEN_SOURCE_PLAYBOOK.md) for launching open-source tools, building developer trust, and setting up free GitHub Organizations and NPM packages.
+- **Architecture Guides**: Opinionated tech stack recommendations for early-stage startups.
 
 ---
 
@@ -41,27 +55,11 @@ npm install cluster-loaders
 npx cluster-loaders add astroid
 ```
 
-### Basic Usage
-```tsx
-import React from 'react';
-import { CurveLoader, curves } from 'cluster-loaders';
-
-export default function LoadingState() {
-  const astroid = curves.find(c => c.name === "Astroid");
-
-  return (
-    <div className="w-24 h-24 text-purple-400">
-      <CurveLoader config={astroid} />
-    </div>
-  );
-}
-```
-
 ---
 
 ## Contributing
 
-This project is maintained as open source. Contributions, bug reports, and pull requests are welcomed.
+We welcome community contributions. Feel free to submit pull requests, add new founder resources, or report issues.
 
 ### Development Setup
 
@@ -74,19 +72,21 @@ This project is maintained as open source. Contributions, bug reports, and pull 
    ```bash
    npm install
    ```
-3. Start the local server:
+3. Start local server:
    ```bash
    npm run dev
    ```
-4. Create your feature branch, add components under `src/components/` or `packages/cluster-loaders/src/`, and submit a Pull Request.
+4. Add resources or components and submit a Pull Request.
 
 ---
 
 ## Socials & Links
 
 - **Website**: [torusfoundingspace.com](https://torusfoundingspace.com)
-- **GitHub**: [Torus-Founding-Space / FS-Cluster-Resources](https://github.com/Torus-Founding-Space/FS-Cluster-Resources)
-- **NPM**: [cluster-loaders](https://www.npmjs.com/package/cluster-loaders)
+- **GitHub Organization**: [Torus-Founding-Space](https://github.com/Torus-Founding-Space)
+- **GitHub Repository**: [FS-Cluster-Resources](https://github.com/Torus-Founding-Space/FS-Cluster-Resources)
+- **NPM Package**: [cluster-loaders](https://www.npmjs.com/package/cluster-loaders)
+- **NPM Profile**: [~kishore_n](https://www.npmjs.com/~kishore_n)
 - **Twitter / X**: [@TorusFS](https://x.com)
 - **Discord**: [Join Community](https://discord.gg)
 

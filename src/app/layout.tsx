@@ -34,8 +34,8 @@ const helvetica = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Fs-Cluster Dev Resources",
-  description: "A premium collection of developer resources and tools",
+  title: "Fs-Cluster Founder Resources",
+  description: "A premium collection of developer and founder resources",
 };
 
 export default function RootLayout({
@@ -47,20 +47,19 @@ export default function RootLayout({
     <html lang="en" className="dark selection:bg-white/20" suppressHydrationWarning>
       <body className={`${helvetica.variable} antialiased min-h-screen bg-[#050505] text-white selection:text-white font-sans overflow-x-hidden relative flex flex-col`}>
         <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.03] via-transparent to-transparent -z-10" />
-        <RootProvider>
+        <RootProvider theme={{ defaultTheme: 'dark', forcedTheme: 'dark' }}>
           <HomeLayout
             nav={{
               title: (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <Image
-                    src="/logos/LOGOGIF.gif"
-                    alt="Fs-Cluster"
-                    width={40}
-                    height={40}
-                    style={{ width: 'auto', height: '40px' }}
-                    className="rounded-full mix-blend-screen opacity-90"
-                    unoptimized
+                    src="/donut.png"
+                    alt="Torus FS Donut Icon"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 rounded-lg object-contain"
                   />
+                  <span className="font-bold text-sm tracking-tight text-white">FS Cluster</span>
                 </div>
               ),
               transparentMode: "top",
@@ -76,7 +75,7 @@ export default function RootLayout({
               { text: "Learning", url: "/docs/learning", active: "nested-url" },
               {
                 type: 'icon',
-                url: 'https://twitter.com/fscluster',
+                url: 'https://twitter.com',
                 text: 'Twitter',
                 icon: (
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -86,7 +85,7 @@ export default function RootLayout({
               },
               {
                 type: 'icon',
-                url: 'https://discord.gg/fscluster',
+                url: 'https://discord.gg',
                 text: 'Discord',
                 icon: (
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -95,7 +94,7 @@ export default function RootLayout({
                 ),
               },
             ]}
-            githubUrl="https://github.com/fs-cluster"
+            githubUrl="https://github.com/Torus-Founding-Space/FS-Cluster-Resources"
           >
             {children}
           </HomeLayout>

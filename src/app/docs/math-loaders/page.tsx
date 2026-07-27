@@ -25,10 +25,6 @@ export default function MathLoadersPage() {
       </DocsDescription>
 
       <DocsBody>
-        <Callout className="border-[#CBA6F7]/30 bg-[#CBA6F7]/10 text-[#CBA6F7] [&_code]:bg-[#CBA6F7]/20 [&_code]:text-[#CBA6F7] [&_code]:border-[#CBA6F7]/30 [&_svg]:text-[#CBA6F7]">
-          Each loader is driven by continuous parametric equations <code>p(t)</code> with high-resolution sub-pixel particle trailing. Works across React, Vue, Next.js, Svelte & HTML5.
-        </Callout>
-
         {/* ── Quickstart & Framework Guide ───────────────────────────── */}
         <h2 id="quickstart">Installation & Setup Guide</h2>
         

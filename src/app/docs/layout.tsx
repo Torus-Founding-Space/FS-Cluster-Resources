@@ -20,12 +20,12 @@ export default function Layout({ children }: { children: ReactNode }) {
         },
       }}
       nav={{
-        title: <span className="font-semibold text-sm">Documentation</span>,
+        title: <span className="font-semibold text-sm">Founder Resources</span>,
       }}
       sidebar={{
         defaultOpenLevel: 1,
       }}
-      githubUrl="https://github.com/fs-cluster"
+      githubUrl="https://github.com/Torus-Founding-Space/FS-Cluster-Resources"
     >
       {children}
     </DocsLayout>
