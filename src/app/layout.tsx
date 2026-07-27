@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { HomeLayout } from "fumadocs-ui/layouts/home";
+import { Analytics } from "@vercel/analytics/next";
 import "fumadocs-ui/style.css";
 import "./globals.css";
 
@@ -132,6 +133,7 @@ export default function RootLayout({
           >
             {children}
           </HomeLayout>
+          <Analytics />
         </RootProvider>
       </body>
     </html>
