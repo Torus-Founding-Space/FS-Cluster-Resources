@@ -23,17 +23,17 @@
 
 You do **NOT** need to pay for hosting! The best developer documentation sites in the world run on **100% free tier hosting**.
 
-### Option A: **Vercel (Recommended for Next.js & Fumadocs)** — *Cost: $0/mo*
+### Option A: **Vercel (Recommended for Next.js & Fumadocs)**, *Cost: $0/mo*
 - **Why**: Since your documentation is built with Next.js & Fumadocs, Vercel gives you:
   - Automatic continuous deployments on every `git push`.
   - Global CDN edge network for instant page loading worldwide.
   - Free SSL certificates and free custom domain binding (`docs.fscluster.com` or `loaders.trousfs.com`).
 - **Setup**: Connect your GitHub repository to Vercel in 2 clicks.
 
-### Option B: **Cloudflare Pages** — *Cost: $0/mo*
+### Option B: **Cloudflare Pages**, *Cost: $0/mo*
 - **Why**: Unlimited bandwidth and 500 builds per month for free. Extremely fast edge network.
 
-### Option C: **GitHub Pages** — *Cost: $0/mo*
+### Option C: **GitHub Pages**, *Cost: $0/mo*
 - **Why**: Native hosting directly inside your GitHub repository.
 
 ---
@@ -53,7 +53,7 @@ When a developer runs your CLI command in their terminal:
 2. The CLI prompts or copies `CurveLoader.tsx`, `useCurveAnimation.ts`, and the selected curve directly into their `components/ui/` directory.
 3. A terminal banner prints:
    ```
-   ⚡ cluster-loaders — Powered by FS Cluster & Trous-FS
+   ⚡ cluster-loaders - Powered by FS Cluster & Torus-FS
    ```
 4. This creates a zero-dependency component inside the user's project while cementing your brand in their developer workflow.
 

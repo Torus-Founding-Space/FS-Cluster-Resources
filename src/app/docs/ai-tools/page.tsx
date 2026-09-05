@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "AI Tools",
+  description: "Curated AI tools, integrations, and prompting guides for founders and engineers.",
+  alternates: { canonical: "/docs/ai-tools" },
+  // Placeholder page with no published content yet.
+  robots: { index: false, follow: true },
+};
+
 export default function AiToolsPage() {
   return (
     <div className="p-8 max-w-2xl">

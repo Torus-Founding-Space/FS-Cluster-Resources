@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Startup Stack",
+  description: "The tools and services worth paying for, and the ones that are not.",
+  alternates: { canonical: "/docs/startup-stack" },
+  // Placeholder page with no published content yet.
+  robots: { index: false, follow: true },
+};
+
 export default function StartupStackPage() {
   return (
     <div className="p-8 max-w-2xl">

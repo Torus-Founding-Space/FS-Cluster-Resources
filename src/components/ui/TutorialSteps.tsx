@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, Copy, Terminal, Code2, Layers } from "lucide-react";
+import { Check, Copy, Terminal, Code2 } from "lucide-react";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 
-type FrameworkKey = "react" | "vue" | "next" | "svelte" | "vanilla";
+type FrameworkKey = "react" | "next" | "vue" | "svelte" | "vanilla";
 
 interface StepItem {
   id: string;
@@ -18,18 +19,28 @@ interface StepItem {
 
 interface FrameworkConfig {
   name: string;
-  iconName: string;
   badge: string;
   intro: string;
   steps: StepItem[];
 }
 
+const Inline = ({ children }: { children: React.ReactNode }) => (
+  <code className="px-1.5 py-0.5 rounded bg-white/10 text-[#CBA6F7] text-xs font-mono">
+    {children}
+  </code>
+);
+
+/**
+ * cluster-loaders ships React components. The non-React guides below mount a
+ * React root inside the host framework rather than pretending a native
+ * binding exists; that is the setup those stacks actually need.
+ */
 const FRAMEWORK_DATA: Record<FrameworkKey, FrameworkConfig> = {
   react: {
     name: "React",
-    iconName: "React",
     badge: "Vite + React",
-    intro: "Installing cluster-loaders in React is seamless via NPM or our instant CLI component generator.",
+    intro:
+      "Installing cluster-loaders in React is seamless via npm or our instant CLI component generator.",
     steps: [
       {
         id: "step-1",
@@ -37,8 +48,12 @@ const FRAMEWORK_DATA: Record<FrameworkKey, FrameworkConfig> = {
         title: "Create your project",
         description: (
           <>
-            Start by creating a new React project if you don't have one set up already. The recommended approach is using{" "}
-            <span className="font-semibold text-white underline decoration-white/30 underline-offset-4">Create Vite</span>.
+            Start by creating a new React project if you don&apos;t have one set up
+            already. The recommended approach is using{" "}
+            <span className="font-semibold text-white underline decoration-white/30 underline-offset-4">
+              Vite
+            </span>
+            .
           </>
         ),
         codeHeader: "Terminal",
@@ -48,57 +63,60 @@ cd my-app`,
       {
         id: "step-2",
         number: "02",
-        title: "Install Cluster Loaders",
+        title: "Install cluster-loaders",
         description: (
           <>
-            Install <code className="px-1.5 py-0.5 rounded bg-white/10 text-[#CBA6F7] text-xs font-mono">cluster-loaders</code> via npm, pnpm, or copy zero-dependency components with npx.
+            Install <Inline>cluster-loaders</Inline> from npm, or copy a single
+            loader&apos;s source straight into your project with the CLI.
           </>
         ),
         codeHeader: "Terminal",
         code: `npm install cluster-loaders
 
-# Or add single component directly into your codebase:
-npx cluster-loaders add astroid`,
+# Or copy one loader's source into your codebase:
+npx cluster-loaders add astroid
+
+# Not sure which one? List every preset id:
+npx cluster-loaders list`,
       },
       {
         id: "step-3",
         number: "03",
-        title: "Import and render animation",
+        title: "Import and render",
         description: (
           <>
-            Import <code className="px-1.5 py-0.5 rounded bg-white/10 text-[#CBA6F7] text-xs font-mono">CurveLoader</code> and supply any parametric curve preset or custom equation.
+            Import <Inline>CurveLoader</Inline> and look a preset up by its id, or
+            pass a config object of your own.
           </>
         ),
         codeHeader: "App.tsx",
-        code: `import { CurveLoader, curves } from "cluster-loaders";
+        code: `import { CurveLoader, curveById } from "cluster-loaders";
+
+const astroid = curveById("astroid")!;
 
 export default function App() {
-  const astroid = curves.find((c) => c.name === "Astroid");
-
   return (
     <div className="w-32 h-32 text-[#CBA6F7]">
       <CurveLoader config={astroid} />
     </div>
   );
 }`,
-        highlightLines: [1, 8],
+        highlightLines: [1, 3, 8],
       },
     ],
   },
   next: {
     name: "Next.js",
-    iconName: "Next",
     badge: "App Router",
-    intro: "Full support for Next.js 14/15 App Router & Server Components with smooth client-side Canvas rendering.",
+    intro:
+      "Works with the Next.js App Router. The loaders animate in the browser, so they render from a Client Component.",
     steps: [
       {
         id: "step-1",
         number: "01",
-        title: "Create Next.js App",
+        title: "Create a Next.js app",
         description: (
-          <>
-            Initialize a new Next.js project with Tailwind CSS and TypeScript configured.
-          </>
+          <>Initialize a new Next.js project with TypeScript and Tailwind configured.</>
         ),
         codeHeader: "Terminal",
         code: `npx create-next-app@latest my-next-app --typescript --tailwind --app
@@ -110,7 +128,7 @@ cd my-next-app`,
         title: "Install cluster-loaders",
         description: (
           <>
-            Add <code className="px-1.5 py-0.5 rounded bg-white/10 text-[#CBA6F7] text-xs font-mono">cluster-loaders</code> to your project dependencies.
+            Add <Inline>cluster-loaders</Inline> to your project dependencies.
           </>
         ),
         codeHeader: "Terminal",
@@ -119,202 +137,225 @@ cd my-next-app`,
       {
         id: "step-3",
         number: "03",
-        title: "Use in Client Component",
+        title: "Use it in a Client Component",
         description: (
           <>
-            Add <code className="px-1.5 py-0.5 rounded bg-white/10 text-[#CBA6F7] text-xs font-mono">"use client"</code> at the top of your loader wrapper component.
+            The loaders use <Inline>requestAnimationFrame</Inline> and{" "}
+            <Inline>&lt;canvas&gt;</Inline>, so mark the wrapper with{" "}
+            <Inline>&quot;use client&quot;</Inline>.
           </>
         ),
         codeHeader: "components/LoadingSpinner.tsx",
         code: `"use client";
 
-import { CurveLoader, curves } from "cluster-loaders";
+import { CurveLoader, curveById } from "cluster-loaders";
+
+const gravityWell = curveById("gravity-well")!;
 
 export function LoadingSpinner() {
-  const Lissajous = curves.find((c) => c.name === "Lissajous 3:4");
-
   return (
     <div className="w-24 h-24 text-emerald-400">
-      <CurveLoader config={Lissajous} speed={1.2} />
+      <CurveLoader config={gravityWell} />
     </div>
   );
 }`,
-        highlightLines: [1, 3, 9],
+        highlightLines: [1, 3, 5],
       },
     ],
   },
   vue: {
     name: "Vue.js",
-    iconName: "Vue",
     badge: "Vue 3 + Vite",
-    intro: "All parametric math equations & Canvas trail mechanics work natively in Vue 3 via Web Components or Composable functions.",
+    intro:
+      "cluster-loaders is a React component library. In Vue, mount it into a container element with a small React root, about ten lines, and you get every preset.",
     steps: [
       {
         id: "step-1",
         number: "01",
-        title: "Create Vue project",
+        title: "Install the package and React",
         description: (
           <>
-            Start by bootstrapping a Vue 3 project with Vite.
+            React and React DOM are peer dependencies, so install them alongside{" "}
+            <Inline>cluster-loaders</Inline>.
           </>
         ),
         codeHeader: "Terminal",
-        code: `npm create vue@latest my-vue-app
-cd my-vue-app`,
+        code: `npm install cluster-loaders react react-dom`,
       },
       {
         id: "step-2",
         number: "02",
-        title: "Add Web Component or Composable",
+        title: "Wrap it in a Vue component",
         description: (
           <>
-            Use our framework-agnostic core package or register the custom Web Component <code className="px-1.5 py-0.5 rounded bg-white/10 text-[#CBA6F7] text-xs font-mono">&lt;cluster-loader&gt;</code>.
+            Create the React root on mount and tear it down on unmount so the
+            animation loop is always cleaned up.
           </>
         ),
-        codeHeader: "Terminal",
-        code: `npm install cluster-loaders`,
+        codeHeader: "ClusterLoader.vue",
+        code: `<script setup lang="ts">
+import { onMounted, onBeforeUnmount, ref } from "vue";
+import { createElement } from "react";
+import { createRoot, type Root } from "react-dom/client";
+import { CurveLoader, curveById } from "cluster-loaders";
+
+const props = defineProps<{ preset: string }>();
+const host = ref<HTMLDivElement | null>(null);
+let root: Root | null = null;
+
+onMounted(() => {
+  if (!host.value) return;
+  root = createRoot(host.value);
+  root.render(createElement(CurveLoader, { config: curveById(props.preset)! }));
+});
+
+onBeforeUnmount(() => root?.unmount());
+</script>
+
+<template>
+  <div ref="host" class="w-32 h-32 text-[#CBA6F7]" />
+</template>`,
+        highlightLines: [3, 4, 12, 13, 17],
       },
       {
         id: "step-3",
         number: "03",
-        title: "Mount in Vue Template",
-        description: (
-          <>
-            Render the parametric loader canvas inside any Vue component template.
-          </>
-        ),
+        title: "Use it anywhere",
+        description: <>Pass any preset id from the gallery below.</>,
         codeHeader: "App.vue",
         code: `<script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { renderParametricCanvas } from 'cluster-loaders/core';
-
-const canvasRef = ref<HTMLCanvasElement | null>(null);
-
-onMounted(() => {
-  if (canvasRef.value) {
-    renderParametricCanvas(canvasRef.value, { curve: 'Astroid', speed: 1.0 });
-  }
-});
+import ClusterLoader from "./ClusterLoader.vue";
 </script>
 
 <template>
-  <div className="loader-container">
-    <canvas ref="canvasRef" width="300" height="300" />
-  </div>
+  <ClusterLoader preset="astroid" />
 </template>`,
-        highlightLines: [3, 8, 15],
+        highlightLines: [6],
       },
     ],
   },
   svelte: {
     name: "Svelte",
-    iconName: "Svelte",
     badge: "SvelteKit",
-    intro: "Zero-dependency mathematical canvas animation functions embed seamlessly into Svelte & SvelteKit action directives.",
+    intro:
+      "Same approach as Vue: a Svelte action creates a React root on the node and unmounts it when the node goes away.",
     steps: [
       {
         id: "step-1",
         number: "01",
-        title: "Create Svelte project",
+        title: "Install the package and React",
         description: (
           <>
-            Scaffold a SvelteKit project using the official CLI.
+            Install <Inline>cluster-loaders</Inline> together with its React peer
+            dependencies.
           </>
         ),
         codeHeader: "Terminal",
-        code: `npx sv create my-app
-cd my-app`,
+        code: `npm install cluster-loaders react react-dom`,
       },
       {
         id: "step-2",
         number: "02",
-        title: "Install package",
+        title: "Write a Svelte action",
         description: (
           <>
-            Install <code className="px-1.5 py-0.5 rounded bg-white/10 text-[#CBA6F7] text-xs font-mono">cluster-loaders</code> package.
+            The action&apos;s <Inline>destroy</Inline> hook unmounts the React root,
+            which stops the animation frame loop.
           </>
         ),
-        codeHeader: "Terminal",
-        code: `npm install cluster-loaders`,
+        codeHeader: "clusterLoader.ts",
+        code: `import { createElement } from "react";
+import { createRoot } from "react-dom/client";
+import { CurveLoader, curveById } from "cluster-loaders";
+
+export function clusterLoader(node: HTMLElement, preset: string) {
+  const root = createRoot(node);
+  root.render(createElement(CurveLoader, { config: curveById(preset)! }));
+
+  return {
+    destroy: () => root.unmount(),
+  };
+}`,
+        highlightLines: [6, 7, 10],
       },
       {
         id: "step-3",
         number: "03",
-        title: "Bind Svelte Action",
+        title: "Bind it to an element",
         description: (
           <>
-            Use Svelte's <code className="px-1.5 py-0.5 rounded bg-white/10 text-[#CBA6F7] text-xs font-mono">use:loader</code> action directive for automatic canvas mounting and cleanup.
+            Apply the action with <Inline>use:</Inline> and pass a preset id.
           </>
         ),
         codeHeader: "Loader.svelte",
         code: `<script lang="ts">
-  import { clusterAction } from 'cluster-loaders/svelte';
+  import { clusterLoader } from "./clusterLoader";
 </script>
 
-<div class="w-32 h-32">
-  <canvas use:clusterAction={{ preset: 'RoseCurve', petals: 7 }} />
-</div>`,
-        highlightLines: [2, 6],
+<div class="w-32 h-32 text-[#CBA6F7]" use:clusterLoader={"gear-train"} />`,
+        highlightLines: [5],
       },
     ],
   },
   vanilla: {
-    name: "Vanilla JS / HTML5",
-    iconName: "HTML5",
-    badge: "Framework Agnostic",
-    intro: "Use pure JavaScript modules, Web Components, or standalone script tags directly in any web stack.",
+    name: "Vanilla JS",
+    badge: "Any stack",
+    intro:
+      "No framework? Mount a React root onto any element. Works inside Rails, Laravel, Django, WordPress or a plain HTML page built with a bundler.",
     steps: [
       {
         id: "step-1",
         number: "01",
-        title: "Include Script or Web Component",
+        title: "Install with a bundler",
         description: (
           <>
-            Import via CDN bundle or standalone ES module into your HTML document.
+            The package ships ESM and CJS builds. Use any bundler (Vite, esbuild,
+            webpack) to resolve <Inline>cluster-loaders</Inline> and React.
           </>
         ),
-        codeHeader: "index.html",
-        code: `<script type="module" src="https://cdn.jsdelivr.net/npm/cluster-loaders/dist/index.mjs"></script>`,
+        codeHeader: "Terminal",
+        code: `npm install cluster-loaders react react-dom`,
       },
       {
         id: "step-2",
         number: "02",
-        title: "Use HTML Custom Element",
+        title: "Mount onto an element",
         description: (
           <>
-            Place the custom element anywhere in your DOM hierarchy.
+            Give the container a size and a <Inline>color</Inline>. Loaders draw in
+            the inherited text colour.
           </>
         ),
-        codeHeader: "index.html",
-        code: `<!-- Works in PHP, Laravel, Ruby, Django, HTML5, WordPress & everywhere -->
-<cluster-loader 
-  preset="astroid" 
-  color="#CBA6F7" 
-  speed="1"
-></cluster-loader>`,
-        highlightLines: [2, 3, 4, 5, 6],
+        codeHeader: "main.js",
+        code: `import { createElement } from "react";
+import { createRoot } from "react-dom/client";
+import { CurveLoader, curveById } from "cluster-loaders";
+
+const host = document.querySelector("#loader");
+const root = createRoot(host);
+
+root.render(createElement(CurveLoader, { config: curveById("noise-blob") }));
+
+// Stop the animation and release the element when you're done:
+// root.unmount();`,
+        highlightLines: [6, 8, 11],
       },
       {
         id: "step-3",
         number: "03",
-        title: "Or initialize via JS API",
+        title: "Or copy the source, no dependency",
         description: (
           <>
-            Imperatively target any HTML5 <code className="px-1.5 py-0.5 rounded bg-white/10 text-[#CBA6F7] text-xs font-mono">&lt;canvas&gt;</code> element.
+            The CLI writes a loader&apos;s actual source into your project, so you can
+            drop the dependency entirely and edit the maths yourself.
           </>
         ),
-        codeHeader: "main.js",
-        code: `import { createClusterLoader } from 'cluster-loaders';
+        codeHeader: "Terminal",
+        code: `npx cluster-loaders add braided-helix
 
-const canvas = document.querySelector('#loader-canvas');
-const instance = createClusterLoader(canvas, {
-  curve: 'Hypotrochoid',
-  trailLength: 0.95
-});
-
-// Clean up when done loading
-// instance.destroy();`,
-        highlightLines: [1, 4, 5, 6, 7],
+# Writes into components/ui/cluster-loaders/:
+#   useCurveAnimation.ts, canvas.ts,
+#   BraidedHelixCanvas.tsx, BraidedHelixLoader.tsx`,
       },
     ],
   },
@@ -322,26 +363,27 @@ const instance = createClusterLoader(canvas, {
 
 export function TutorialSteps() {
   const [activeTab, setActiveTab] = useState<FrameworkKey>("react");
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const { copy, isCopied } = useCopyToClipboard();
 
   const currentFramework = FRAMEWORK_DATA[activeTab];
-
-  const handleCopy = (code: string, id: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
-  };
 
   return (
     <div className="w-full my-8 text-white/90">
       {/* ── Framework Tabs Bar ────────────────────────────────────────── */}
-      <div className="flex flex-wrap items-center gap-2 pb-4 mb-6 border-b border-white/10">
+      <div
+        role="tablist"
+        aria-label="Framework"
+        className="flex flex-wrap items-center gap-2 pb-4 mb-6 border-b border-white/10"
+      >
         {(Object.keys(FRAMEWORK_DATA) as FrameworkKey[]).map((key) => {
           const fw = FRAMEWORK_DATA[key];
           const isActive = activeTab === key;
           return (
             <button
               key={key}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
               onClick={() => setActiveTab(key)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-all ${
                 isActive
@@ -366,7 +408,7 @@ export function TutorialSteps() {
       {/* ── Steps List ──────────────────────────────────────────────────── */}
       <div className="space-y-10">
         {currentFramework.steps.map((step) => {
-          const isCopied = copiedId === `${activeTab}-${step.id}`;
+          const copyId = `${activeTab}-${step.id}`;
 
           return (
             <div
@@ -406,11 +448,12 @@ export function TutorialSteps() {
                     </div>
 
                     <button
-                      onClick={() => handleCopy(step.code, `${activeTab}-${step.id}`)}
+                      type="button"
+                      onClick={() => void copy(step.code, copyId)}
                       className="flex items-center gap-1.5 px-2 py-1 rounded text-[11px] font-mono text-white/50 hover:text-white hover:bg-white/10 transition-colors"
-                      title="Copy code"
+                      aria-label={`Copy the ${step.title} snippet`}
                     >
-                      {isCopied ? (
+                      {isCopied(copyId) ? (
                         <>
                           <Check className="w-3 h-3 text-emerald-400" />
                           <span className="text-emerald-400">Copied!</span>
@@ -430,7 +473,9 @@ export function TutorialSteps() {
                       <code>
                         {step.code.split("\n").map((line, idx) => {
                           const lineNumber = idx + 1;
-                          const isHighlighted = step.codeHeader !== "Terminal" && step.highlightLines?.includes(lineNumber);
+                          const isHighlighted =
+                            step.codeHeader !== "Terminal" &&
+                            step.highlightLines?.includes(lineNumber);
 
                           return (
                             <div

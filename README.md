@@ -6,7 +6,7 @@
 
   **Free Open-Source Resources, Dev Tools & Ecosystem for Founders**
 
-  [Documentation Hub](https://fs-cluster-docs.vercel.app) | [NPM Package](https://www.npmjs.com/package/cluster-loaders) | [Apply to Torus FS](https://torusfoundingspace.com)
+  [Documentation Hub](https://clusterdocs.torusfoundingspace.com) | [NPM Package](https://www.npmjs.com/package/cluster-loaders) | [Apply to Torus FS](https://torusfoundingspace.com)
 
   [![NPM Version](https://img.shields.io/npm/v/cluster-loaders.svg?style=flat-square)](https://www.npmjs.com/package/cluster-loaders)
   [![License](https://img.shields.io/github/license/Torus-Founding-Space/FS-Cluster-Resources.svg?style=flat-square)](LICENSE)
@@ -20,7 +20,7 @@
 
 FS Cluster Founder Resources, is an open-source hub of free developer tools, infrastructure blueprints, branding kits, and growth resources designed to help founders and engineering teams build and launch startups efficiently.
 
-- **Documentation Hub**: [Access Free Resources](https://fs-cluster-docs.vercel.app)
+- **Documentation Hub**: [Access Free Resources](https://clusterdocs.torusfoundingspace.com)
 - **NPM Package**: [`cluster-loaders`](https://www.npmjs.com/package/cluster-loaders)
 - **Community Membership**: [Torus Founding Space](https://torusfoundingspace.com) (100% Free)
 
@@ -52,7 +52,15 @@ npm install cluster-loaders
 
 ### Installation via CLI (shadcn-style)
 ```bash
+# List every available loader id
+npx cluster-loaders list
+
+# Copy one loader's source into your project
 npx cluster-loaders add astroid
+npx cluster-loaders add gravity-well
+
+# Replace files that already exist
+npx cluster-loaders add astroid --force
 ```
 
 ---
@@ -72,11 +80,20 @@ We welcome community contributions. Feel free to submit pull requests, add new f
    ```bash
    npm install
    ```
-3. Start local server:
+3. Start the local server:
    ```bash
    npm run dev
    ```
-4. Add resources or components and submit a Pull Request.
+4. Before opening a PR, run the full check (types, lint, production build):
+   ```bash
+   npm run check
+   ```
+   If you changed anything under `packages/cluster-loaders/src`, rebuild the
+   package too:
+   ```bash
+   npm run package:build
+   ```
+5. Add resources or components and submit a Pull Request.
 
 ---
 
@@ -87,8 +104,6 @@ We welcome community contributions. Feel free to submit pull requests, add new f
 - **GitHub Repository**: [FS-Cluster-Resources](https://github.com/Torus-Founding-Space/FS-Cluster-Resources)
 - **NPM Package**: [cluster-loaders](https://www.npmjs.com/package/cluster-loaders)
 - **NPM Profile**: [~kishore_n](https://www.npmjs.com/~kishore_n)
-- **Twitter / X**: [@TorusFS](https://x.com)
-- **Discord**: [Join Community](https://discord.gg)
 
 ---
 

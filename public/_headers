@@ -1,0 +1,22 @@
+# Cloudflare Pages headers.
+#
+# `output: "export"` means next.config.ts headers() is unavailable, so security
+# headers are declared here instead. See the static-export docs for the list of
+# unsupported Next.js features.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+# Fingerprinted build assets never change under the same name.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/logos/*
+  Cache-Control: public, max-age=86400
+
+/images/*
+  Cache-Control: public, max-age=86400

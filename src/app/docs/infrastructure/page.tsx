@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Infrastructure",
+  description: "Deployment, hosting and architecture references for small teams.",
+  alternates: { canonical: "/docs/infrastructure" },
+  // Placeholder page with no published content yet.
+  robots: { index: false, follow: true },
+};
+
 export default function InfrastructurePage() {
   return (
     <div className="p-8 max-w-2xl">

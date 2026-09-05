@@ -1,10 +1,9 @@
 import { DocsPage, DocsBody, DocsTitle, DocsDescription } from "fumadocs-ui/page";
 import type { TOCItemType } from "fumadocs-core/toc";
 import Link from "next/link";
-import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { Callout } from "fumadocs-ui/components/callout";
 import { LoadersGallery } from "./_gallery";
 import { TutorialSteps } from "@/components/ui/TutorialSteps";
+import type { Metadata } from "next";
 
 const toc: TOCItemType[] = [
   { title: "Installation & Setup Guide", url: "#quickstart", depth: 2 },
@@ -15,6 +14,12 @@ const toc: TOCItemType[] = [
   { title: "Geometry Loaders", url: "#geometry", depth: 3 },
   { title: "Particle Systems", url: "#particles", depth: 3 },
 ];
+
+export const metadata: Metadata = {
+  title: "cluster-loaders",
+  description: "Parametric and physics-driven loading animations for React, rendered in SVG and HTML5 Canvas. Free, open source, zero dependencies.",
+  alternates: { canonical: "/docs/math-loaders" },
+};
 
 export default function MathLoadersPage() {
   return (

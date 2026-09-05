@@ -1,14 +1,13 @@
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import type { ReactNode } from 'react';
 import { pageTree } from '@/lib/source';
-import Image from 'next/image';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <DocsLayout
       tree={pageTree}
-      // "auto" puts the section tabs as a dropdown inside the sidebar —
-      // this is the standard fumadocs pattern (how fumadocs.dev works).
+      // "auto" puts the section tabs as a dropdown inside the sidebar.
+      // This is the standard fumadocs pattern (how fumadocs.dev works).
       tabMode="auto"
       tabs={{
         transform(option, node) {

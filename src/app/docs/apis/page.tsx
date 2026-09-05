@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "APIs",
+  description: "Documentation for production-ready APIs and integration guides.",
+  alternates: { canonical: "/docs/apis" },
+  // Placeholder page with no published content yet.
+  robots: { index: false, follow: true },
+};
+
 export default function ApisPage() {
   return (
     <div className="p-8 max-w-2xl">

@@ -1,12 +1,16 @@
 {
-  "name": "resources4founders",
+  "name": "fs-cluster-docs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint && npm run build",
+    "package:build": "npm --prefix packages/cluster-loaders run build"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -34,5 +38,7 @@
     "eslint-config-next": "16.2.10",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "description": "Free open-source developer tools, architecture guides and startup stack resources for founders.",
+  "license": "MIT"
 }

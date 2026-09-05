@@ -1,4 +1,11 @@
 import Link from 'next/link';
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "UI & Design",
+  description: "Open-source UI components and design tooling for startups, including the cluster-loaders animation library.",
+  alternates: { canonical: "/docs/ui-design" },
+};
 
 export default function UiDesignPage() {
   return (

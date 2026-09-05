@@ -3,21 +3,80 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { CurveLoader } from "@/components/CurveLoader";
 import { curves } from "@/curves";
-import type { CurveConfig } from "@/hooks/useCurveAnimation";
+import type { CurveConfig, CurveParams } from "@/hooks/useCurveAnimation";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+/* ─── Shape parameter controls ───────────────────────────────────────────
+   Declared once and driven off whatever the active curve actually defines,
+   so a curve automatically gets a slider for each parameter it uses, and
+   never gets one for a parameter it doesn't.                              */
+
+type ParamKey = keyof CurveParams;
+
+interface ParamControl {
+  label: string;
+  min: number;
+  max: number;
+  step?: number;
+}
+
+const PARAM_CONTROLS: Partial<Record<ParamKey, ParamControl>> = {
+  a: { label: "Param (a)", min: 5, max: 60 },
+  b: { label: "Param (b)", min: 1, max: 30 },
+  c: { label: "Damping (c)", min: 0.1, max: 3, step: 0.1 },
+  k: { label: "Stiffness / Ratio (k)", min: 1, max: 10 },
+  m: { label: "Symmetry (m)", min: 1, max: 16 },
+  n: { label: "Order (n)", min: 1, max: 12 },
+  n1: { label: "Exponent (n1)", min: 0.2, max: 6, step: 0.1 },
+  n2: { label: "Exponent (n2)", min: 0.2, max: 6, step: 0.1 },
+  n3: { label: "Exponent (n3)", min: 0.2, max: 6, step: 0.1 },
+  r: { label: "Radius (r)", min: 4, max: 30 },
+  r1: { label: "Orbit Radius 1 (r1)", min: 5, max: 35 },
+  r2: { label: "Orbit Radius 2 (r2)", min: 2, max: 25 },
+  r3: { label: "Orbit Radius 3 (r3)", min: 1, max: 15 },
+  ra: { label: "Attractor Orbit (Ra)", min: 10, max: 45 },
+  rb: { label: "Rolling Radius (Rb)", min: 2, max: 25 },
+  rm: { label: "Magnetic Radius (Rm)", min: 4, max: 25 },
+  s: { label: "Scale (s)", min: 1, max: 40 },
+  baseRadius: { label: "Base Radius", min: 8, max: 45 },
+  detailAmplitude: { label: "Detail Amplitude", min: 0, max: 20 },
+  freq: { label: "Frequency", min: 1, max: 20 },
+  petalCount: { label: "Petals", min: 2, max: 16 },
+  pulseAmp: { label: "Pulse Amp", min: 0.1, max: 0.8, step: 0.05 },
+  spikes: { label: "Spikes", min: 2, max: 24 },
+  waveAmp: { label: "Fluid Wave Amplitude", min: 1, max: 15 },
+  waveFreq: { label: "Wave Frequency", min: 1, max: 20 },
+};
+
+const PARAM_ORDER = Object.keys(PARAM_CONTROLS) as ParamKey[];
+
+/** Particle-count slider bounds, which mean different things per loader type. */
+const PARTICLE_CONTROL: Record<string, ParamControl> = {
+  "sand-timer": { label: "Sand Grains", min: 40, max: 300, step: 10 },
+  voronoi: { label: "Seed Points", min: 4, max: 20 },
+  default: { label: "Particles", min: 10, max: 150 },
+};
+
+function particleControl(config: CurveConfig): ParamControl {
+  return (config.type && PARTICLE_CONTROL[config.type]) || PARTICLE_CONTROL.default;
+}
+
+function activeParams(config: CurveConfig): ParamKey[] {
+  return PARAM_ORDER.filter((key) => typeof config[key] === "number");
+}
+
 /* ─── Dynamic Code Generator (using secondary color #CBA6F7) ────────────── */
 
 function generateCode(curve: CurveConfig): string {
-  const coreProps: Record<string, any> = {
-    name: curve.name,
-  };
+  const coreProps: Record<string, string | number | boolean> = { name: curve.name };
 
   if (curve.type) coreProps.type = curve.type;
   coreProps.rotate = curve.rotate;
@@ -26,28 +85,13 @@ function generateCode(curve: CurveConfig): string {
   coreProps.durationMs = curve.durationMs;
   coreProps.strokeWidth = curve.strokeWidth;
   if (curve.pulseDurationMs !== undefined) coreProps.pulseDurationMs = curve.pulseDurationMs;
-  if (curve.pulseAmp !== undefined) coreProps.pulseAmp = curve.pulseAmp;
 
-  if (curve.baseRadius !== undefined) coreProps.baseRadius = curve.baseRadius;
-  if (curve.detailAmplitude !== undefined) coreProps.detailAmplitude = curve.detailAmplitude;
-  if (curve.petalCount !== undefined) coreProps.petalCount = curve.petalCount;
-  if (curve.curveScale !== undefined) coreProps.curveScale = curve.curveScale;
-  if (curve.a !== undefined) coreProps.a = curve.a;
-  if (curve.b !== undefined) coreProps.b = curve.b;
-  if (curve.r !== undefined) coreProps.r = curve.r;
-  if (curve.k !== undefined) coreProps.k = curve.k;
-  if (curve.c !== undefined) coreProps.c = curve.c;
-  if (curve.ra !== undefined) coreProps.ra = curve.ra;
-  if (curve.rm !== undefined) coreProps.rm = curve.rm;
-  if (curve.r1 !== undefined) coreProps.r1 = curve.r1;
-  if (curve.r2 !== undefined) coreProps.r2 = curve.r2;
-  if (curve.r3 !== undefined) coreProps.r3 = curve.r3;
-  if (curve.waveAmp !== undefined) coreProps.waveAmp = curve.waveAmp;
-  if (curve.waveFreq !== undefined) coreProps.waveFreq = curve.waveFreq;
-  if (curve.freq !== undefined) coreProps.freq = curve.freq;
+  for (const key of activeParams(curve)) {
+    coreProps[key] = curve[key] as number;
+  }
 
   const propsFormatted = Object.entries(coreProps)
-    .map(([k, v]) => `  ${k}: ${typeof v === "string" && !v.startsWith("Math.") ? `"${v}"` : v},`)
+    .map(([k, v]) => `  ${k}: ${typeof v === "string" ? `"${v}"` : v},`)
     .join("\n");
 
   const defaultPoint = `  point(progress, detailScale, config) {
@@ -105,6 +149,7 @@ function SimpleSlider({
       </div>
       <input
         type="range"
+        aria-label={label}
         min={min}
         max={max}
         step={step}
@@ -116,10 +161,10 @@ function SimpleSlider({
   );
 }
 
-/* ─── Viewport hook — pauses animation when card is off-screen ────────── */
+/* ─── Viewport hook: pauses animation when card is off-screen ────────── */
 
 function useInViewport(rootMargin = "100px") {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLButtonElement | null>(null);
   const [inView, setInView] = useState(false);
 
   useEffect(() => {
@@ -143,45 +188,46 @@ function useInViewport(rootMargin = "100px") {
 
 function LoaderCard({ curve }: { curve: CurveConfig }) {
   const [activeConfig, setActiveConfig] = useState<CurveConfig>(curve);
-  const [copied, setCopied] = useState(false);
   const { ref: cardRef, inView } = useInViewport("120px");
+  const { copy, isCopied } = useCopyToClipboard();
 
-  const updateParam = (key: string, val: any) => {
+  const updateParam = (key: string, val: number) => {
     setActiveConfig((prev) => ({ ...prev, [key]: val }));
   };
 
   const [activeTab, setActiveTab] = useState<"cli" | "npm" | "code">("cli");
 
-  const loaderId = activeConfig.type || activeConfig.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  const cliSnippet = `npx cluster-loaders add ${loaderId}`;
-  const npmSnippet = `import { CurveLoader, curves } from "cluster-loaders";\n\nexport default function ${activeConfig.name.replace(/[^a-zA-Z0-9]/g, "")}Loader() {\n  const config = curves.find((c) => c.name === "${activeConfig.name}");\n  return (\n    <div className="w-24 h-24 text-[#CBA6F7]">\n      <CurveLoader config={config} />\n    </div>\n  );\n}`;
+  const cliSnippet = `npx cluster-loaders add ${curve.id}`;
+  const npmSnippet = `import { CurveLoader, curves } from "cluster-loaders";
+
+export default function ${activeConfig.name.replace(/[^a-zA-Z0-9]/g, "")}Loader() {
+  const config = curves.find((c) => c.id === "${curve.id}")!;
+  return (
+    <div className="w-24 h-24 text-[#CBA6F7]">
+      <CurveLoader config={config} />
+    </div>
+  );
+}`;
   const customSnippet = useMemo(() => generateCode(activeConfig), [activeConfig]);
 
-  const activeSnippet = activeTab === "cli" ? cliSnippet : activeTab === "npm" ? npmSnippet : customSnippet;
+  const activeSnippet =
+    activeTab === "cli" ? cliSnippet : activeTab === "npm" ? npmSnippet : customSnippet;
 
-  function copy() {
-    navigator.clipboard.writeText(activeSnippet).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  }
-
-  const [cardCliCopied, setCardCliCopied] = useState(false);
-
-  function copyCardCli(e: React.MouseEvent) {
-    e.stopPropagation();
-    navigator.clipboard.writeText(cliSnippet).then(() => {
-      setCardCliCopied(true);
-      setTimeout(() => setCardCliCopied(false), 2000);
-    });
-  }
+  const particles = particleControl(activeConfig);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div ref={cardRef} className="group flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 hover:border-[#CBA6F7]/50 hover:bg-white/[0.04] transition-all duration-300 cursor-pointer">
-          {/* Loader preview box — only active when in viewport */}
-          <div className="flex justify-center items-center py-7 mb-3 rounded-xl bg-black/40 border border-white/[0.04] group-hover:border-[#CBA6F7]/30 transition-colors">
+        {/* A real button: the card opens a dialog, so it has to be reachable
+            and operable from the keyboard. */}
+        <button
+          ref={cardRef}
+          type="button"
+          aria-label={`Customize the ${curve.name} loader`}
+          className="group flex flex-col text-left rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 hover:border-[#CBA6F7]/50 hover:bg-white/[0.04] focus-visible:border-[#CBA6F7]/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#CBA6F7]/60 transition-all duration-300 cursor-pointer"
+        >
+          {/* Loader preview box, only animates while in the viewport */}
+          <div className="flex justify-center items-center py-7 mb-3 rounded-xl bg-black/40 border border-white/[0.04] group-hover:border-[#CBA6F7]/30 transition-colors w-full">
             <div className="w-28 h-28 text-[#CBA6F7] group-hover:scale-105 transition-transform duration-300">
               <CurveLoader config={curve} isActive={inView} />
             </div>
@@ -194,35 +240,48 @@ function LoaderCard({ curve }: { curve: CurveConfig }) {
             <p className="text-xs text-white/40 mt-0.5">{curve.tag}</p>
           </div>
 
-          {/* Instant CLI copy bar on card */}
-          <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between gap-2" onClick={(e) => e.stopPropagation()}>
-            <code className="text-[11px] font-mono text-[#CBA6F7]/80 truncate bg-black/50 px-2.5 py-1.5 rounded-lg border border-[#CBA6F7]/20 flex-1">
-              npx cluster-loaders add {loaderId}
+          {/* Instant CLI copy bar on the card */}
+          <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between gap-2 w-full">
+            <code className="text-[11px] font-mono text-[#CBA6F7]/80 truncate bg-black/50 px-2.5 py-1.5 rounded-lg border border-[#CBA6F7]/20 flex-1 text-left">
+              {cliSnippet}
             </code>
-            <button
-              onClick={copyCardCli}
-              className="px-2.5 py-1.5 text-[11px] font-mono font-medium rounded-lg bg-[#CBA6F7]/15 text-[#CBA6F7] hover:bg-[#CBA6F7]/30 border border-[#CBA6F7]/30 transition-all shrink-0 cursor-pointer"
+            {/* A nested <button> inside the dialog trigger would be invalid
+                HTML, so this is a span with an explicit button role. */}
+            <span
+              role="button"
+              tabIndex={0}
+              aria-label={`Copy the install command for ${curve.name}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                void copy(cliSnippet, "card-cli");
+              }}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter" && e.key !== " ") return;
+                e.preventDefault();
+                e.stopPropagation();
+                void copy(cliSnippet, "card-cli");
+              }}
+              className="px-2.5 py-1.5 text-[11px] font-mono font-medium rounded-lg bg-[#CBA6F7]/15 text-[#CBA6F7] hover:bg-[#CBA6F7]/30 border border-[#CBA6F7]/30 transition-all shrink-0 cursor-pointer select-none"
             >
-              {cardCliCopied ? "Copied!" : "Copy"}
-            </button>
+              {isCopied("card-cli") ? "Copied!" : "Copy"}
+            </span>
           </div>
-        </div>
+        </button>
       </DialogTrigger>
 
       <DialogContent className="max-w-4xl bg-[#0c1017] border border-white/10 p-6 sm:p-8 rounded-2xl">
         <DialogHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <DialogTitle className="text-xl font-semibold text-white">{activeConfig.name}</DialogTitle>
-              <p className="text-xs font-mono text-[#CBA6F7] uppercase tracking-wider mt-0.5">{activeConfig.tag}</p>
-            </div>
-          </div>
+          <DialogTitle className="text-xl font-semibold text-white">
+            {activeConfig.name}
+          </DialogTitle>
+          <DialogDescription className="text-xs font-mono text-[#CBA6F7] uppercase tracking-wider mt-0.5">
+            {activeConfig.tag}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-5 mt-2">
-          {/* Top Horizontal Section: Preview (left) + Dynamic Shape Controls Grid (right) */}
+          {/* Preview (left) + dynamic shape controls (right) */}
           <div className="flex flex-col md:flex-row gap-5 items-stretch">
-            {/* Live Preview Box with subtle formula */}
             <div className="w-full md:w-48 h-48 bg-black/60 border border-white/10 rounded-xl flex flex-col items-center justify-center shrink-0 p-4 relative overflow-hidden">
               <div className="w-32 h-32 text-[#CBA6F7]">
                 <CurveLoader config={activeConfig} />
@@ -234,38 +293,14 @@ function LoaderCard({ curve }: { curve: CurveConfig }) {
               )}
             </div>
 
-            {/* Dynamic Controls Grid - switches per curve! */}
+            {/* Controls are generated from the curve's own parameters */}
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 bg-white/[0.02] border border-white/[0.06] p-4 rounded-xl items-center">
               <SimpleSlider
-                label={
-                  activeConfig.type === "sand-timer"
-                    ? "Sand Grains"
-                    : activeConfig.type === "voronoi"
-                    ? "Seed Points"
-                    : activeConfig.type === "reaction-web"
-                    ? "Web Nodes"
-                    : "Particles"
-                }
+                label={particles.label}
                 value={activeConfig.particleCount}
-                min={
-                  activeConfig.type === "sand-timer"
-                    ? 40
-                    : activeConfig.type === "voronoi"
-                    ? 4
-                    : activeConfig.type === "reaction-web"
-                    ? 10
-                    : 10
-                }
-                max={
-                  activeConfig.type === "sand-timer"
-                    ? 300
-                    : activeConfig.type === "voronoi"
-                    ? 20
-                    : activeConfig.type === "reaction-web"
-                    ? 30
-                    : 150
-                }
-                step={activeConfig.type === "sand-timer" ? 10 : 1}
+                min={particles.min}
+                max={particles.max}
+                step={particles.step ?? 1}
                 onChange={(val) => updateParam("particleCount", val)}
               />
               <SimpleSlider
@@ -277,7 +312,7 @@ function LoaderCard({ curve }: { curve: CurveConfig }) {
                 unit="s"
                 onChange={(val) => updateParam("durationMs", Math.round(val * 1000))}
               />
-              {!activeConfig.category && activeConfig.type !== "voronoi" && (
+              {!activeConfig.category && (
                 <SimpleSlider
                   label="Trail Length"
                   value={Math.round(activeConfig.trailSpan * 100)}
@@ -298,172 +333,57 @@ function LoaderCard({ curve }: { curve: CurveConfig }) {
                 onChange={(val) => updateParam("strokeWidth", val)}
               />
 
-              {activeConfig.pulseAmp !== undefined && (
-                <SimpleSlider
-                  label="Pulse Amp"
-                  value={Number(activeConfig.pulseAmp.toFixed(2))}
-                  min={0.1}
-                  max={0.8}
-                  step={0.05}
-                  onChange={(val) => updateParam("pulseAmp", val)}
-                />
-              )}
-
-              {/* Curve-specific dynamic controls */}
-              {activeConfig.a !== undefined && (
-                <SimpleSlider
-                  label={activeConfig.b !== undefined ? "Param (a)" : "Size (a)"}
-                  value={activeConfig.a}
-                  min={5}
-                  max={60}
-                  step={1}
-                  onChange={(val) => updateParam("a", val)}
-                />
-              )}
-              {activeConfig.b !== undefined && (
-                <SimpleSlider
-                  label="Param (b)"
-                  value={activeConfig.b}
-                  min={1}
-                  max={30}
-                  step={1}
-                  onChange={(val) => updateParam("b", val)}
-                />
-              )}
-              {activeConfig.r !== undefined && (
-                <SimpleSlider
-                  label="Radius (r)"
-                  value={activeConfig.r}
-                  min={4}
-                  max={30}
-                  step={1}
-                  onChange={(val) => updateParam("r", val)}
-                />
-              )}
-              {activeConfig.ra !== undefined && (
-                <SimpleSlider
-                  label="Attractor Orbit (Ra)"
-                  value={activeConfig.ra}
-                  min={10}
-                  max={45}
-                  step={1}
-                  onChange={(val) => updateParam("ra", val)}
-                />
-              )}
-              {activeConfig.rm !== undefined && (
-                <SimpleSlider
-                  label="Magnetic Radius (Rm)"
-                  value={activeConfig.rm}
-                  min={4}
-                  max={25}
-                  step={1}
-                  onChange={(val) => updateParam("rm", val)}
-                />
-              )}
-              {activeConfig.k !== undefined && (
-                <SimpleSlider
-                  label="Stiffness / Ratio (k)"
-                  value={activeConfig.k}
-                  min={1}
-                  max={10}
-                  step={1}
-                  onChange={(val) => updateParam("k", val)}
-                />
-              )}
-              {activeConfig.c !== undefined && (
-                <SimpleSlider
-                  label="Damping (c)"
-                  value={activeConfig.c}
-                  min={0.1}
-                  max={3.0}
-                  step={0.1}
-                  onChange={(val) => updateParam("c", val)}
-                />
-              )}
-              {activeConfig.waveAmp !== undefined && (
-                <SimpleSlider
-                  label="Fluid Wave Amplitude"
-                  value={activeConfig.waveAmp}
-                  min={1}
-                  max={15}
-                  step={1}
-                  onChange={(val) => updateParam("waveAmp", val)}
-                />
-              )}
-              {activeConfig.r1 !== undefined && (
-                <SimpleSlider
-                  label="Orbit Radius 1 (r1)"
-                  value={activeConfig.r1}
-                  min={5}
-                  max={35}
-                  step={1}
-                  onChange={(val) => updateParam("r1", val)}
-                />
-              )}
-              {activeConfig.r2 !== undefined && (
-                <SimpleSlider
-                  label="Orbit Radius 2 (r2)"
-                  value={activeConfig.r2}
-                  min={2}
-                  max={25}
-                  step={1}
-                  onChange={(val) => updateParam("r2", val)}
-                />
-              )}
-              {activeConfig.r3 !== undefined && (
-                <SimpleSlider
-                  label="Orbit Radius 3 (r3)"
-                  value={activeConfig.r3}
-                  min={1}
-                  max={15}
-                  step={1}
-                  onChange={(val) => updateParam("r3", val)}
-                />
-              )}
+              {activeParams(activeConfig).map((key) => {
+                const control = PARAM_CONTROLS[key]!;
+                const value = activeConfig[key] as number;
+                return (
+                  <SimpleSlider
+                    key={key}
+                    label={control.label}
+                    value={Number(value.toFixed(2))}
+                    min={control.min}
+                    max={control.max}
+                    step={control.step ?? 1}
+                    onChange={(val) => updateParam(key, val)}
+                  />
+                );
+              })}
             </div>
           </div>
 
-          {/* Bottom Section: Code Snippets & Command Tabs (CLI / NPM / Standalone) */}
+          {/* Code snippets & command tabs (CLI / NPM / standalone) */}
           <div className="flex flex-col rounded-xl border border-white/10 bg-black/70 overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/10">
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setActiveTab("cli")}
-                  className={`px-2.5 py-1 text-xs font-mono rounded-md transition-colors ${
-                    activeTab === "cli"
-                      ? "bg-[#CBA6F7]/20 text-[#CBA6F7] border border-[#CBA6F7]/30"
-                      : "text-white/40 hover:text-white/70"
-                  }`}
-                >
-                  npx CLI
-                </button>
-                <button
-                  onClick={() => setActiveTab("npm")}
-                  className={`px-2.5 py-1 text-xs font-mono rounded-md transition-colors ${
-                    activeTab === "npm"
-                      ? "bg-[#CBA6F7]/20 text-[#CBA6F7] border border-[#CBA6F7]/30"
-                      : "text-white/40 hover:text-white/70"
-                  }`}
-                >
-                  NPM Import
-                </button>
-                <button
-                  onClick={() => setActiveTab("code")}
-                  className={`px-2.5 py-1 text-xs font-mono rounded-md transition-colors ${
-                    activeTab === "code"
-                      ? "bg-[#CBA6F7]/20 text-[#CBA6F7] border border-[#CBA6F7]/30"
-                      : "text-white/40 hover:text-white/70"
-                  }`}
-                >
-                  Standalone Code
-                </button>
+                {(
+                  [
+                    ["cli", "npx CLI"],
+                    ["npm", "NPM Import"],
+                    ["code", "Standalone Code"],
+                  ] as const
+                ).map(([key, label]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setActiveTab(key)}
+                    aria-pressed={activeTab === key}
+                    className={`px-2.5 py-1 text-xs font-mono rounded-md transition-colors ${
+                      activeTab === key
+                        ? "bg-[#CBA6F7]/20 text-[#CBA6F7] border border-[#CBA6F7]/30"
+                        : "text-white/40 hover:text-white/70"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
 
               <button
-                onClick={copy}
+                type="button"
+                onClick={() => void copy(activeSnippet, "dialog")}
                 className="px-3 py-1 text-xs font-medium rounded-md bg-[#CBA6F7]/20 text-[#CBA6F7] hover:bg-[#CBA6F7]/30 border border-[#CBA6F7]/30 transition-all cursor-pointer"
               >
-                {copied ? "Copied!" : "Copy Command"}
+                {isCopied("dialog") ? "Copied!" : "Copy Command"}
               </button>
             </div>
             <pre className="p-4 text-xs font-mono text-white/70 overflow-x-auto leading-relaxed max-h-56">
@@ -478,117 +398,80 @@ function LoaderCard({ curve }: { curve: CurveConfig }) {
 
 /* ─── Exported Loaders Gallery (Categorized) ────────────────────────── */
 
-export function LoadersGallery() {
-  const parametricCurves = curves.filter(
-    (c) => !c.category && c.type !== "voronoi"
-  );
-  const geometryLoaders = curves.filter(
-    (c) => c.category === "geometry"
-  );
-  const particleLoaders = curves.filter(
-    (c) => c.category === "particles" || c.type === "voronoi"
-  );
-  const motionLoaders = curves.filter(
-    (c) => c.category === "motion"
-  );
-  const spatialLoaders = curves.filter(
-    (c) => c.category === "spatial"
-  );
+const SECTIONS: {
+  id: string;
+  title: string;
+  blurb: string;
+  match: (c: CurveConfig) => boolean;
+}[] = [
+  {
+    id: "parametric-curves",
+    title: "Parametric Curves",
+    blurb:
+      "Fundamental 2D parametric mathematical curves : astroids, epicycloids, rose petals, and Lissajous figures.",
+    match: (c) => !c.category && c.type !== "voronoi",
+  },
+  {
+    id: "motion",
+    title: "Motion & Waves",
+    blurb:
+      "Wave equations, chaos attractors, multi-arm epicycles, and continuous organic motion.",
+    match: (c) => c.category === "motion",
+  },
+  {
+    id: "spatial",
+    title: "3D & Spatial",
+    blurb:
+      "Topographic heightfield contours, spacetime gravity wells, braided 3D helixes, and spin phase transitions.",
+    match: (c) => c.category === "spatial",
+  },
+  {
+    id: "geometry",
+    title: "Geometry Loaders",
+    blurb:
+      "Mathematically precise geometric forms : spirals, standing waves, sonar sweeps, and real gear tooth profiles.",
+    match: (c) => c.category === "geometry",
+  },
+  {
+    id: "particles",
+    title: "Particle Systems",
+    blurb:
+      "Dynamic particle fields, organic tessellations, and reaction-diffusion simulations.",
+    match: (c) => c.category === "particles" || c.type === "voronoi",
+  },
+];
 
+export function LoadersGallery() {
   return (
     <div className="space-y-10 not-prose my-6">
-      {/* Simple / Parametric Curves Section */}
-      <div className="mb-5">
-        <h3 id="parametric-curves" className="text-lg font-semibold text-white flex items-center gap-2.5 scroll-mt-20">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#CBA6F7]"></span>
-          Parametric Curves
-        </h3>
-        <p className="text-xs text-white/50 mt-1">
-          Fundamental 2D parametric mathematical curves : astroids, epicycloids, rose petals, and Lissajous figures.
-        </p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {parametricCurves.map((curve) => (
-          <LoaderCard key={curve.name} curve={curve} />
-        ))}
-      </div>
+      {SECTIONS.map((section, index) => {
+        const items = curves.filter(section.match);
+        if (items.length === 0) return null;
 
-      {/* Motion & Physics Section */}
-      <div className="pt-8 border-t border-white/[0.08]">
-        <div className="mb-5">
-          <h3 id="motion" className="text-lg font-semibold text-white flex items-center gap-2.5 scroll-mt-20">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#CBA6F7]"></span>
-            Motion & Waves
-          </h3>
-          <p className="text-xs text-white/50 mt-1">
-            Wave equations, chaos attractors, multi-arm epicycles, and continuous organic motion.
-          </p>
-        </div>
+        return (
+          <section
+            key={section.id}
+            className={index === 0 ? undefined : "pt-8 border-t border-white/[0.08]"}
+          >
+            <div className="mb-5">
+              <h3
+                id={section.id}
+                className="text-lg font-semibold text-white flex items-center gap-2.5 scroll-mt-20"
+              >
+                <span className="w-2.5 h-2.5 rounded-full bg-[#CBA6F7]" />
+                {section.title}
+              </h3>
+              <p className="text-xs text-white/50 mt-1">{section.blurb}</p>
+            </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {motionLoaders.map((curve) => (
-            <LoaderCard key={curve.name} curve={curve} />
-          ))}
-        </div>
-      </div>
-
-      {/* Spatial Section */}
-      <div className="pt-8 border-t border-white/[0.08]">
-        <div className="mb-5">
-          <h3 id="spatial" className="text-lg font-semibold text-white flex items-center gap-2.5 scroll-mt-20">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#CBA6F7]"></span>
-            3D & Spatial
-          </h3>
-          <p className="text-xs text-white/50 mt-1">
-            Topographic heightfield contours, spacetime gravity wells, braided 3D helixes, and spin phase transitions.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {spatialLoaders.map((curve) => (
-            <LoaderCard key={curve.name} curve={curve} />
-          ))}
-        </div>
-      </div>
-
-      {/* Geometry Section */}
-      <div className="pt-8 border-t border-white/[0.08]">
-        <div className="mb-5">
-          <h3 id="geometry" className="text-lg font-semibold text-white flex items-center gap-2.5 scroll-mt-20">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#CBA6F7]"></span>
-            Geometry Loaders
-          </h3>
-          <p className="text-xs text-white/50 mt-1">
-            Mathematically precise geometric forms : spirals, standing waves, sonar sweeps, and real gear tooth profiles.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {geometryLoaders.map((curve) => (
-            <LoaderCard key={curve.name} curve={curve} />
-          ))}
-        </div>
-      </div>
-
-      {/* Particle & Field Loaders Section */}
-      <div className="pt-8 border-t border-white/[0.08]">
-        <div className="mb-5">
-          <h3 id="particles" className="text-lg font-semibold text-white flex items-center gap-2.5 scroll-mt-20">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#CBA6F7]"></span>
-            Particle Systems
-          </h3>
-          <p className="text-xs text-white/50 mt-1">
-            Dynamic particle fields, organic tessellations, and reaction-diffusion simulations.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {particleLoaders.map((curve) => (
-            <LoaderCard key={curve.name} curve={curve} />
-          ))}
-        </div>
-      </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {items.map((curve) => (
+                <LoaderCard key={curve.id} curve={curve} />
+              ))}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }
-
-

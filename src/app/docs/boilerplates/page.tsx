@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Boilerplates",
+  description: "Production-ready starter templates and boilerplates to launch your next product faster.",
+  alternates: { canonical: "/docs/boilerplates" },
+  // Placeholder page with no published content yet.
+  robots: { index: false, follow: true },
+};
+
 export default function BoilerplatesPage() {
   return (
     <div className="p-8 max-w-2xl">

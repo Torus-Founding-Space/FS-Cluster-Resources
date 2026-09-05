@@ -34,7 +34,25 @@ export const pageTree: PageTree.Root = {
         name: 'Overview',
         url: '/docs/dev-tools',
       },
-      children: [],
+      children: [
+        {
+          type: 'folder',
+          name: 'Extensions',
+          defaultOpen: true,
+          children: [
+            {
+              type: 'page',
+              name: 'Webpage to Figma converter ( free )',
+              url: '/docs/dev-tools/webpage-to-figma',
+            },
+            {
+              type: 'page',
+              name: 'Privacy Policy',
+              url: '/privacy',
+            },
+          ],
+        },
+      ],
     },
 
     // ── APIs ─────────────────────────────────────────────────────
