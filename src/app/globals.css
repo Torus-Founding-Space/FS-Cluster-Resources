@@ -186,6 +186,11 @@
   html {
     @apply font-sans;
     font-size: 87.5%; /* Changes 1rem from 16px to 14px to fix 100% zoom scale */
+    overflow-x: hidden; /* belt-and-suspenders with body; no sideways scroll on mobile */
+  }
+  /* Media should never force the page wider than the viewport on small screens. */
+  img, video {
+    max-width: 100%;
   }
 }
 

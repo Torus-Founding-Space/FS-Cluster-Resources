@@ -59,8 +59,8 @@ export default function PrivacyPage() {
             priority
           />
         </div>
-        <div>
-          <div className="flex items-center gap-2 mb-1">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
             <span className="border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-mono text-emerald-400">
               Runs on your device
             </span>
@@ -68,7 +68,7 @@ export default function PrivacyPage() {
               Browser Extension
             </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
             Privacy Policy: Webpage to Figma
           </h1>
         </div>

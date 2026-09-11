@@ -1,10 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
-import Image from "next/image";
 import { RootProvider } from "fumadocs-ui/provider/next";
-import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { Analytics } from "@vercel/analytics/next";
-import { sections, siteConfig } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
 import "fumadocs-ui/style.css";
 import "./globals.css";
 
@@ -89,6 +87,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: "#050505",
   colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -100,34 +100,8 @@ export default function RootLayout({
     <html lang="en" className="dark selection:bg-white/20" suppressHydrationWarning>
       <body className={`${inter.variable} ${geistMono.variable} antialiased min-h-screen bg-[#050505] text-white selection:text-white font-sans overflow-x-hidden relative flex flex-col`}>
         <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.03] via-transparent to-transparent -z-10" />
-        <RootProvider theme={{ defaultTheme: 'dark', forcedTheme: 'dark' }}>
-          <HomeLayout
-            nav={{
-              title: (
-                <div className="flex items-center gap-2.5">
-                  <Image
-                    src="/logos/LOGOGIF.gif"
-                    alt={siteConfig.name}
-                    width={48}
-                    height={48}
-                    style={{ width: 'auto', height: '48px' }}
-                    className="mix-blend-screen opacity-95 rounded-none"
-                    unoptimized
-                    priority
-                  />
-                </div>
-              ),
-              transparentMode: "top",
-            }}
-            links={sections.map((section) => ({
-              text: section.title,
-              url: section.href,
-              active: "nested-url" as const,
-            }))}
-            githubUrl={siteConfig.githubUrl}
-          >
-            {children}
-          </HomeLayout>
+        <RootProvider theme={{ defaultTheme: "dark", forcedTheme: "dark" }}>
+          {children}
           <Analytics />
         </RootProvider>
       </body>

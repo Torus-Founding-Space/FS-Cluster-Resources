@@ -242,7 +242,7 @@ export default function ${activeConfig.name.replace(/[^a-zA-Z0-9]/g, "")}Loader(
 
           {/* Instant CLI copy bar on the card */}
           <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between gap-2 w-full">
-            <code className="text-[11px] font-mono text-[#CBA6F7]/80 truncate bg-black/50 px-2.5 py-1.5 rounded-lg border border-[#CBA6F7]/20 flex-1 text-left">
+            <code className="text-[11px] font-mono text-[#CBA6F7]/80 truncate bg-black/50 px-2.5 py-1.5 rounded-lg border border-[#CBA6F7]/20 flex-1 min-w-0 text-left">
               {cliSnippet}
             </code>
             {/* A nested <button> inside the dialog trigger would be invalid
@@ -269,7 +269,7 @@ export default function ${activeConfig.name.replace(/[^a-zA-Z0-9]/g, "")}Loader(
         </button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-4xl bg-[#0c1017] border border-white/10 p-6 sm:p-8 rounded-2xl">
+      <DialogContent className="sm:max-w-4xl bg-[#0c1017] border border-white/10 rounded-2xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-white">
             {activeConfig.name}

@@ -1,6 +1,8 @@
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
+import Image from 'next/image';
 import type { ReactNode } from 'react';
 import { pageTree } from '@/lib/source';
+import { siteConfig } from '@/lib/site';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
@@ -19,7 +21,21 @@ export default function Layout({ children }: { children: ReactNode }) {
         },
       }}
       nav={{
-        title: <span className="font-semibold text-sm">Founder Resources</span>,
+        // Links back to the marketing site; keeps the docs navbar to a single
+        // row on mobile.
+        url: '/',
+        title: (
+          <span className="flex items-center gap-2">
+            <Image
+              src="/logos/logo.png"
+              alt={siteConfig.name}
+              width={20}
+              height={20}
+              className="rounded-none"
+            />
+            <span className="font-semibold text-sm">Founder Resources</span>
+          </span>
+        ),
       }}
       sidebar={{
         defaultOpenLevel: 1,
