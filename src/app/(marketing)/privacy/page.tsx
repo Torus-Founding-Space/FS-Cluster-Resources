@@ -18,15 +18,49 @@ import {
   Baby,
   RefreshCw,
   Scale,
+  Code2,
+  Globe,
 } from "lucide-react";
 
-const LAST_UPDATED = "6 September 2026";
+const LAST_UPDATED = "21 September 2026";
 const CONTACT_EMAIL = "founders@torusfoundingspace.com";
 
+const PLUGIN_HTML_POINTS: [string, string][] = [
+  [
+    "It runs on your device.",
+    "The plugin renders your HTML in a sandboxed frame inside the plugin panel, reads the result, and builds Figma layers from it. The HTML is not sent to us.",
+  ],
+  [
+    "It may load what the HTML references.",
+    "Pages usually depend on things hosted elsewhere, such as a stylesheet, a script library, web fonts and stock images. To render your page as intended, the plugin requests those resources. It requests only URLs that appear in your pasted HTML, and only from the hosts listed in section 5. Requests to any other host are blocked by Figma.",
+  ],
+  [
+    "Scripts in your HTML run inside the sandbox.",
+    "To render a page as it would appear, the plugin lets the page's own scripts run, including library scripts loaded from the hosts listed in section 5. They run inside the sandboxed frame, with no access to your Figma document, and only when you press Convert. Only paste code you trust, as you would before opening it in a browser.",
+  ],
+];
+
+const PLUGIN_HOSTS: [string, string][] = [
+  ["cdn.tailwindcss.com", "Tailwind CSS"],
+  [
+    "cdn.jsdelivr.net, cdnjs.cloudflare.com, unpkg.com",
+    "JavaScript and CSS libraries",
+  ],
+  ["fonts.googleapis.com, fonts.gstatic.com", "Google Fonts"],
+  [
+    "images.unsplash.com, plus.unsplash.com, images.pexels.com, picsum.photos",
+    "Stock and placeholder images",
+  ],
+  [
+    "placehold.co, i.pravatar.cc, api.dicebear.com",
+    "Placeholder images and avatars",
+  ],
+];
+
 export const metadata: Metadata = {
-  title: "Privacy Policy - Webpage to Figma Extension",
+  title: "Privacy Policy - Webpage to Figma",
   description:
-    "Privacy Policy for the Webpage to Figma browser extension. Captures run entirely on your device, the export file is saved locally, and no data is sent to our servers.",
+    "Privacy Policy for the Webpage to Figma browser extension and Figma plugin. Captures run entirely on your device, the export file is saved locally, and no data is sent to our servers.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -65,7 +99,7 @@ export default function PrivacyPage() {
               Runs on your device
             </span>
             <span className="border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-mono text-white/60">
-              Browser Extension
+              Extension &amp; Plugin
             </span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-white">
@@ -75,9 +109,9 @@ export default function PrivacyPage() {
       </div>
 
       <p className="text-white/80 text-base sm:text-lg leading-relaxed mb-4">
-        This policy explains what the Webpage to Figma browser extension can see,
-        what it does with it, and where that information can end up. It is written
-        to be read, not to be skimmed past.
+        This policy explains what the Webpage to Figma browser extension and
+        Figma plugin can see, what they do with it, and where that information
+        can end up. It is written to be read, not to be skimmed past.
       </p>
 
       {/* ── Scope ─────────────────────────────────────────────────── */}
@@ -85,9 +119,11 @@ export default function PrivacyPage() {
         <p className="text-sm text-white/70 leading-relaxed">
           <span className="text-white font-semibold">What this covers.</span>{" "}
           The Webpage to Figma browser extension, and the companion Webpage to
-          Figma plugin that imports its export file inside Figma. Together these
-          are called &quot;the Extension&quot; below. &quot;We&quot; means FS Cluster
-          and Torus Founding Space, who publish it.
+          Figma plugin that runs inside Figma. The plugin can import the
+          extension&apos;s export file, and it can also convert HTML that you
+          paste into it. Together these are called &quot;the Extension&quot;
+          below. &quot;We&quot; means FS Cluster and Torus Founding Space, who
+          publish it.
         </p>
       </div>
 
@@ -96,15 +132,21 @@ export default function PrivacyPage() {
         <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
         <div className="space-y-2">
           <p className="text-sm text-white/80 leading-relaxed">
-            <span className="font-semibold text-white">In short:</span> the
-            capture runs entirely in your browser, the result is saved as a file
-            on your own device, and we do not receive it. We run no analytics, no
-            trackers, no telemetry, and no server that your captures are sent to.
+            <span className="font-semibold text-white">In short:</span> captures
+            made by the browser extension run entirely in your browser, the
+            result is saved as a file on your own device, and we do not receive
+            it. When you paste HTML into the Figma plugin, the plugin may request
+            the stylesheets, fonts and images that HTML references, from a short
+            list of third-party hosts named in section 5. We run no analytics, no
+            trackers, no telemetry, and no server that your captures or pasted
+            HTML are sent to.
           </p>
           <p className="text-sm text-white/70 leading-relaxed">
-            The one thing worth knowing is what happens next: if you import that
-            file into Figma, the captured content goes to Figma. Section 5
-            explains this.
+            Two things are worth knowing. If you import a capture or convert
+            pasted HTML, the result goes into your Figma document, which Figma
+            stores (section 7). And when the plugin loads assets for pasted HTML,
+            the hosts serving them see the request, as with any web page (section
+            5).
           </p>
         </div>
       </div>
@@ -118,10 +160,15 @@ export default function PrivacyPage() {
             1. How the Extension is built
           </h2>
           <p className="text-sm sm:text-base leading-relaxed text-white/70">
-            The Extension runs entirely on your machine. It has no backend. There
-            is no account to create, nothing to log in to, and no server of ours
-            that your captures, preferences, or usage are sent to. Parsing,
-            document building, and file generation all happen inside your browser.
+            The Extension has no backend. There is no account to create, nothing
+            to log in to, and no server of ours that your captures, pasted HTML,
+            preferences, or usage are sent to.
+          </p>
+          <p className="text-sm sm:text-base leading-relaxed text-white/70">
+            The browser extension does all of its parsing, document building and
+            file generation inside your browser. The Figma plugin does all of its
+            work inside the Figma plugin panel on your machine. The only network
+            requests either makes are the ones described in sections 3 and 5.
           </p>
         </section>
 
@@ -131,24 +178,36 @@ export default function PrivacyPage() {
             <EyeOff className="w-5 h-5 text-[#CBA6F7]" />
             2. What the Extension accesses
           </h2>
-          <p className="text-sm sm:text-base leading-relaxed text-white/70">
-            To do its job, which is turning a page layout into an editable design
-            file, the Extension reads the following, and only when you start a
-            capture:
-          </p>
 
           <div className="space-y-3 pt-1">
             <div className="p-4 border border-white/10 bg-white/[0.02]">
               <div className="flex items-center gap-2 text-white font-semibold mb-1">
                 <Layers className="w-4 h-4 text-[#CBA6F7]" />
-                <span className="font-mono text-xs">Page content</span>
+                <span className="font-mono text-xs">
+                  Page content (browser extension)
+                </span>
               </div>
               <p className="text-white/70 text-sm">
-                The active tab&apos;s Document Object Model, computed CSS styles,
-                visible text, images, and SVG elements. If the page you capture
-                shows personal or confidential information, that information is
-                part of the capture, because the capture is a picture of the page
-                as rendered. Only pages you explicitly capture are read.
+                When you start a capture, the extension reads the active
+                tab&apos;s Document Object Model, computed CSS styles, visible
+                text, images, and SVG elements. If the page you capture shows
+                personal or confidential information, that information is part of
+                the capture, because the capture is a picture of the page as
+                rendered. Only pages you explicitly capture are read.
+              </p>
+            </div>
+
+            <div className="p-4 border border-white/10 bg-white/[0.02]">
+              <div className="flex items-center gap-2 text-white font-semibold mb-1">
+                <Code2 className="w-4 h-4 text-[#CBA6F7]" />
+                <span className="font-mono text-xs">
+                  HTML you paste (Figma plugin)
+                </span>
+              </div>
+              <p className="text-white/70 text-sm">
+                When you use the plugin&apos;s From HTML tab, it reads the HTML
+                that you paste or open from a file, and nothing else. It does not
+                read other Figma content or your files.
               </p>
             </div>
 
@@ -158,9 +217,10 @@ export default function PrivacyPage() {
                 <span className="font-mono text-xs">Your preferences</span>
               </div>
               <p className="text-white/70 text-sm">
-                Capture settings you choose are kept in your browser&apos;s local
-                extension storage so they persist between sessions. They stay in
-                your browser.
+                Capture settings you choose in the browser are kept in your
+                browser&apos;s local extension storage. The plugin keeps your
+                import settings and panel size in Figma&apos;s local plugin
+                storage on your device. These stay on your device.
               </p>
             </div>
 
@@ -170,9 +230,10 @@ export default function PrivacyPage() {
                 <span className="font-mono text-xs">What it never collects</span>
               </div>
               <p className="text-white/80 text-sm">
-                No names, email addresses, browsing history, keystrokes, IP
-                addresses, payment details, or cookies. The Extension does not
-                watch pages in the background and does not record where you go.
+                No names, email addresses, browsing history, keystrokes, payment
+                details, or cookies. The browser extension does not watch pages
+                in the background and does not record where you go. We do not
+                receive your IP address, because no request of yours reaches us.
               </p>
             </div>
           </div>
@@ -185,7 +246,8 @@ export default function PrivacyPage() {
             3. What happens to a capture
           </h2>
           <p className="text-sm sm:text-base leading-relaxed text-white/70">
-            The captured content is parsed and compressed into a{" "}
+            The browser extension parses and compresses the captured content into
+            a{" "}
             <code className="text-[#CBA6F7] bg-white/5 px-1 py-0.5 border border-white/10 font-mono text-xs">
               .kn
             </code>{" "}
@@ -194,20 +256,95 @@ export default function PrivacyPage() {
             downloads. That file is yours. It is not uploaded, mirrored, logged,
             or copied to us at any point.
           </p>
+          <p className="text-sm sm:text-base leading-relaxed text-white/70">
+            To embed images from other domains, the browser extension may fetch
+            the image files that the captured page already loads. This happens on
+            your device and the files go into your .kn file, not to us.
+          </p>
         </section>
 
         {/* Section 4 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <Code2 className="w-5 h-5 text-[#CBA6F7]" />
+            4. What happens to HTML you paste into the plugin
+          </h2>
+          <p className="text-sm sm:text-base leading-relaxed text-white/70">
+            The plugin&apos;s From HTML tab converts HTML that you provide, for
+            example a page written by an AI assistant, into Figma layers.
+          </p>
+          <div className="space-y-2 pt-1">
+            {PLUGIN_HTML_POINTS.map(([title, body]) => (
+              <div
+                key={title}
+                className="p-4 border border-white/10 bg-white/[0.02]"
+              >
+                <p className="text-sm text-white/70 leading-relaxed">
+                  <span className="text-white font-semibold">{title}</span>{" "}
+                  {body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 5 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <Globe className="w-5 h-5 text-[#CBA6F7]" />
+            5. Third-party hosts contacted by the plugin
+          </h2>
+          <p className="text-sm sm:text-base leading-relaxed text-white/70">
+            Only the plugin&apos;s From HTML tab contacts these hosts, and only
+            for resources your pasted HTML asks for. As with any web page, the
+            host serving a resource can see the request, including your IP
+            address and your browser&apos;s user agent, and handles that under
+            its own privacy policy. We do not receive this information or see
+            which requests were made.
+          </p>
+          <p className="text-sm sm:text-base leading-relaxed text-white/70">
+            The plugin is allowed to contact only these hosts, which are declared
+            in its manifest and enforced by Figma:
+          </p>
+          <div className="overflow-x-auto border border-white/10">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-white/15 bg-white/5 text-white/60 font-mono">
+                  <th className="py-2.5 px-3">Host</th>
+                  <th className="py-2.5 px-3">Typically used for</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/10 text-white/80">
+                {PLUGIN_HOSTS.map(([host, use]) => (
+                  <tr key={host}>
+                    <td className="py-3 px-3 align-top font-semibold text-[#CBA6F7] font-mono">
+                      {host}
+                    </td>
+                    <td className="py-3 px-3 text-sm text-white/70">{use}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-sm sm:text-base leading-relaxed text-white/70">
+            This list may grow as we support more of what AI-written pages use.
+            Any change is listed here and in the plugin&apos;s Figma listing, and
+            the &quot;Last updated&quot; date changes with it.
+          </p>
+        </section>
+
+        {/* Section 6 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <Lock className="w-5 h-5 text-[#CBA6F7]" />
-            4. What we do not do
+            6. What we do not do
           </h2>
           <div className="space-y-2 pt-1">
             {[
               "We do not sell, rent, or trade your data.",
-              "We do not use your data or captured page content for advertising, profiling, or creditworthiness decisions.",
-              "We do not transfer your data to third parties, except as described in section 5, which you control.",
-              "We do not execute remote or dynamically fetched code at runtime.",
+              "We do not use your data, captured page content, or pasted HTML for advertising, profiling, or creditworthiness decisions.",
+              "We do not transfer your data to third parties, except as described in sections 5 and 7, which you control.",
+              "The browser extension does not execute remote or dynamically fetched code. The one exception in our products is the plugin's From HTML tab, described in section 4, which runs the scripts in HTML you provide inside a sandboxed frame.",
             ].map((line) => (
               <div
                 key={line}
@@ -220,23 +357,24 @@ export default function PrivacyPage() {
           </div>
         </section>
 
-        {/* Section 5 */}
+        {/* Section 7 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <Users className="w-5 h-5 text-[#CBA6F7]" />
-            5. Figma, and the one time data leaves your device
+            7. Figma, and the times data leaves your device
           </h2>
           <div className="p-4 border border-[#CBA6F7]/25 bg-[#CBA6F7]/[0.05] space-y-2.5">
             <p className="text-sm text-white/80 leading-relaxed">
-              The Extension writes a file to your device and stops there. It does
-              not send that file anywhere.
+              The browser extension writes a file to your device and stops there.
+              It does not send that file anywhere.
             </p>
             <p className="text-sm text-white/80 leading-relaxed">
-              The file exists to be imported into the companion plugin inside
-              Figma. When you choose to import it, the captured page content is
-              read by that plugin and becomes part of your Figma document, which
-              Figma stores on its servers under your Figma account. You start that
-              transfer, not us, and once the content is in Figma it is governed by{" "}
+              That file exists to be imported into the companion plugin inside
+              Figma. When you import it, or when you convert pasted HTML, the
+              resulting layers become part of your Figma document. Figma stores
+              that document on its servers under your Figma account. You start
+              that transfer, not us, and once the content is in Figma it is
+              governed by{" "}
               <a
                 href="https://www.figma.com/legal/privacy/"
                 target="_blank"
@@ -248,37 +386,38 @@ export default function PrivacyPage() {
               and terms, not this one.
             </p>
             <p className="text-sm text-white/80 leading-relaxed">
-              If you never import the file, the captured content never leaves your
-              device. If you capture a page containing sensitive information, this
-              is the step to think about before taking it.
+              If you never import a file or convert HTML, the captured content
+              never leaves your device. If you capture or paste content
+              containing sensitive information, this is the step to think about
+              before taking it.
             </p>
           </div>
         </section>
 
-        {/* Section 6 */}
+        {/* Section 8 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <HardDrive className="w-5 h-5 text-[#CBA6F7]" />
-            6. Retention
+            8. Retention
           </h2>
           <p className="text-sm sm:text-base leading-relaxed text-white/70">
             We operate no server that receives your data, so there is nothing on
             our side to retain, and nothing for us to delete on request. Export
             files stay on your device until you delete them. Saved preferences
-            stay in your browser until you clear them or uninstall the Extension,
-            which removes them.
+            stay in your browser or in Figma&apos;s plugin storage until you
+            clear them or uninstall the Extension, which removes them.
           </p>
         </section>
 
-        {/* Section 7 */}
+        {/* Section 9 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <KeyRound className="w-5 h-5 text-[#CBA6F7]" />
-            7. Permissions, and why each one is needed
+            9. Permissions, and why each one is needed
           </h2>
           <p className="text-sm sm:text-base leading-relaxed text-white/70">
-            The Extension requests the smallest set of permissions that lets a
-            capture work:
+            <span className="text-white font-semibold">Browser extension.</span>{" "}
+            It requests the smallest set of permissions that lets a capture work:
           </p>
           <div className="overflow-x-auto border border-white/10">
             <table className="w-full text-left text-xs border-collapse">
@@ -331,13 +470,20 @@ export default function PrivacyPage() {
               </tbody>
             </table>
           </div>
+          <p className="text-sm sm:text-base leading-relaxed text-white/70">
+            <span className="text-white font-semibold">Figma plugin.</span> It
+            requests no Figma permissions beyond running in your document. Its
+            network access is limited to the hosts in section 5, and it uses that
+            access only for the From HTML tab. Importing a .kn file makes no
+            network requests.
+          </p>
         </section>
 
-        {/* Section 8 */}
+        {/* Section 10 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <Scale className="w-5 h-5 text-[#CBA6F7]" />
-            8. Your rights
+            10. Your rights
           </h2>
           <p className="text-sm sm:text-base leading-relaxed text-white/70">
             If you are in the EEA, the UK, California, or another place with data
@@ -349,11 +495,11 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        {/* Section 9 */}
+        {/* Section 11 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <Baby className="w-5 h-5 text-[#CBA6F7]" />
-            9. Children
+            11. Children
           </h2>
           <p className="text-sm sm:text-base leading-relaxed text-white/70">
             The Extension is a tool for developers and designers. It is not
@@ -362,26 +508,26 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        {/* Section 10 */}
+        {/* Section 12 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <RefreshCw className="w-5 h-5 text-[#CBA6F7]" />
-            10. Changes to this policy
+            12. Changes to this policy
           </h2>
           <p className="text-sm sm:text-base leading-relaxed text-white/70">
             If this policy changes, the revised version is published at this same
             address and the &quot;Last updated&quot; date at the top changes with
             it. If a change materially affects how your data is handled, we will
-            say so in the extension&apos;s store listing too. This page is the
-            authoritative version.
+            say so in the extension&apos;s store listing and the plugin&apos;s
+            Figma listing too. This page is the authoritative version.
           </p>
         </section>
 
-        {/* Section 11 */}
+        {/* Section 13 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <Mail className="w-5 h-5 text-[#CBA6F7]" />
-            11. Contact
+            13. Contact
           </h2>
           <p className="text-sm sm:text-base leading-relaxed text-white/70">
             Questions about this policy, or about anything the Extension does, can
