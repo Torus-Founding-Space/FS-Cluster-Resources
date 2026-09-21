@@ -27,7 +27,7 @@ export default function DevToolsPage() {
     <DocsPage breadcrumb={{ enabled: false }} footer={{ enabled: false }}>
       <div className="max-w-4xl font-sans">
         {/* Category Tag - Sharp corners */}
-        <div className="inline-flex items-center gap-2 border border-sky-500/30 bg-sky-500/10 px-3 py-1 text-xs font-mono font-medium text-sky-400 tracking-wider uppercase mb-6 rounded-none">
+        <div className="inline-flex items-center gap-2 border border-white/10 bg-white/5 px-3 py-1 text-xs font-mono font-medium text-white/60 tracking-wider uppercase mb-6 rounded-none">
           <Sparkles className="w-3.5 h-3.5" />
           Dev Tools
         </div>
@@ -79,11 +79,11 @@ export default function DevToolsPage() {
                         <CheckCircle2 className="w-3 h-3" />
                         Free
                       </span>
-                      <span className="inline-flex items-center gap-1 border border-sky-500/30 bg-sky-500/10 px-2.5 py-0.5 text-xs font-mono font-medium text-sky-400 rounded-none">
+                      <span className="inline-flex items-center gap-1 border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-mono font-medium text-white/70 rounded-none">
                         <ChromeIcon className="w-3 h-3" />
                         Browser Extension
                       </span>
-                      <span className="inline-flex items-center gap-1 border border-purple-500/30 bg-purple-500/10 px-2.5 py-0.5 text-xs font-mono font-medium text-purple-300 rounded-none">
+                      <span className="inline-flex items-center gap-1 border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-mono font-medium text-white/70 rounded-none">
                         Manifest V3 Ready
                       </span>
                     </div>
@@ -98,11 +98,11 @@ export default function DevToolsPage() {
 
                     <div className="flex flex-wrap gap-x-4 gap-y-2 pt-1 text-xs font-mono text-white/40">
                       <span className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-none" />
+                        <span className="w-1.5 h-1.5 bg-[#CBA6F7] rounded-none" />
                         Full DOM to Vector
                       </span>
                       <span className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-sky-400 rounded-none" />
+                        <span className="w-1.5 h-1.5 bg-[#CBA6F7] rounded-none" />
                         Native Auto-Layout
                       </span>
                       <span className="flex items-center gap-1.5">

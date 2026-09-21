@@ -186,7 +186,16 @@
   html {
     @apply font-sans;
     font-size: 87.5%; /* Changes 1rem from 16px to 14px to fix 100% zoom scale */
-    overflow-x: hidden; /* belt-and-suspenders with body; no sideways scroll on mobile */
+    /* No sideways scroll on mobile. This must live ONLY on <html>, not <body>:
+       setting overflow-x on an element forces its overflow-y to a scrolling
+       value too (CSS overflow spec), which turns that element into a scroll
+       container. <html> is meant to be that scroll container (it already is
+       the page's real scrolling element), but if <body> also got this, body
+       became an extra scroll container that never actually scrolls -- and
+       every `position: sticky` element inside it (the docs nav, sidebar,
+       TOC) stuck relative to body's non-scrolling box instead of the real
+       viewport, so they silently scrolled away with the content. */
+    overflow-x: hidden;
   }
   /* Media should never force the page wider than the viewport on small screens. */
   img, video {

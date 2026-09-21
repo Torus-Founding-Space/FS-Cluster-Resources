@@ -98,7 +98,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark selection:bg-white/20" suppressHydrationWarning>
-      <body className={`${inter.variable} ${geistMono.variable} antialiased min-h-screen bg-[#050505] text-white selection:text-white font-sans overflow-x-hidden relative flex flex-col`}>
+      <body className={`${inter.variable} ${geistMono.variable} antialiased min-h-screen bg-[#050505] text-white selection:text-white font-sans relative flex flex-col`}>
         <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.03] via-transparent to-transparent -z-10" />
         <RootProvider theme={{ defaultTheme: "dark", forcedTheme: "dark" }}>
           {children}
